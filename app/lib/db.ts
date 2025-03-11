@@ -1,6 +1,6 @@
 import { Tale, User } from '../types';
-import { TaleModel } from '../models/Tale';
-import { UserModel } from '../models/User';
+import TaleModel from '../models/Tale';
+import UserModel from '../models/User';
 
 // In a real application, you would use a proper database
 // This is a simple in-memory database for demonstration purposes
@@ -50,7 +50,7 @@ class Database {
   }
 
   getTaleById(id: string): Tale | undefined {
-    return this.tales.find((tale) => tale.id === id);
+    return this.tales.find((tale) => tale._id === id);
   }
 
   createTale(taleData: Omit<Tale, 'id' | 'createdAt' | 'updatedAt'>): Tale {
@@ -62,7 +62,7 @@ class Database {
   }
 
   updateTale(id: string, taleData: Partial<Tale>): Tale | null {
-    const index = this.tales.findIndex((tale) => tale.id === id);
+    const index = this.tales.findIndex((tale) => tale._id === id);
     if (index === -1) return null;
 
     const updatedTale = {
@@ -77,7 +77,7 @@ class Database {
 
   deleteTale(id: string): boolean {
     const initialLength = this.tales.length;
-    this.tales = this.tales.filter((tale) => tale.id !== id);
+    this.tales = this.tales.filter((tale) => tale._id !== id);
     return initialLength !== this.tales.length;
   }
 

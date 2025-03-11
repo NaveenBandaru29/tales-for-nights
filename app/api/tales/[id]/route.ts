@@ -6,13 +6,13 @@ import connectToDatabase from '../../../lib/mongodb';
 import { isAdmin } from '../../../lib/jwt';
 import mongoose from 'mongoose';
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
+// interface RouteParams {
+//   params: {
+//     id: string;
+//   };
+// }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: any) {
   try {
     const { id } = await params;
     
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(request: NextRequest, { params }: any) {
   try {
     // Check if user is admin
     if (!isAdmin(request)) {
@@ -107,7 +107,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(request: NextRequest, { params }: any) {
   try {
     // Check if user is admin
     if (!isAdmin(request)) {
