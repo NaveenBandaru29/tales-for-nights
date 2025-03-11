@@ -32,7 +32,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16 ">
           <div className="flex items-center justify-between md:justify-start w-[100vw]">
             <Link href="/" className="text-xl font-bold">
-              Tales App
+              Tales For Nights
             </Link>
             
             {/* Mobile Menu Toggle Button */}
