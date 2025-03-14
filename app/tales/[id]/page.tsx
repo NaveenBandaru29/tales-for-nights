@@ -11,7 +11,7 @@ export default function TaleDetailPage() {
   const id = params.id as string;  
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 sm:px-4 py-8">
       <div className="mb-6">
         <Link href="/" className="text-blue-600 hover:underline">
           ← Back to all tales

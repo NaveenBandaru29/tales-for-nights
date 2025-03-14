@@ -7,6 +7,7 @@ import { RootState } from '../../store';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import LogoutButton from '../auth/LoginButton';
+import { IoClose } from 'react-icons/io5';
 
 export default function Navbar() {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
@@ -31,8 +32,8 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16 ">
           <div className="flex items-center justify-between md:justify-start w-[100vw]">
-            <Link href="/" className="text-xl font-bold">
-              Tales For Nights
+            <Link href="/" className="text-xl font-semibold">
+              Tales For <span className='text-[24px] font-bold'>Nights</span>
             </Link>
             
             {/* Mobile Menu Toggle Button */}
@@ -41,9 +42,13 @@ export default function Navbar() {
                 onClick={toggleMenu} 
                 className="text-white focus:outline-none"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-8 w-8">
+                {
+                  !isMenuOpen?
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-8 w-8">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
+                :<IoClose className='text-4xl font-bold' />
+                }
               </button>
             </div>
 
@@ -64,12 +69,12 @@ export default function Navbar() {
                   >
                     Admin Dashboard
                   </Link>
-                  <Link 
+                  {/* <Link 
                     href="/admin/create" 
                     className={`px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 duration-300 ${isActive('/admin/create')}`}
                   >
                     Create Tale
-                  </Link>
+                  </Link> */}
                 </div>
               )}
               </div>

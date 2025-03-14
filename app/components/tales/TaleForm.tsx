@@ -29,10 +29,11 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
   const [createTale, { isLoading: isCreating, error: createError }] = useCreateTaleMutation();
   const [updateTale, { isLoading: isUpdating, error: updateError }] = useUpdateTaleMutation();
   
-  const { data: tale, isLoading: isFetching } = useGetTaleByIdQuery(id || '', {
+  const { data, isLoading: isFetching } = useGetTaleByIdQuery(id || '', {
     skip: !id || !isEdit
   });
-  
+  const [prevTale, tale, nextTale] =
+    data && data?.length > 0 ? data : [null, null, null];
   const isLoading = isCreating || isUpdating || isFetching;
   const error = createError || updateError;
 

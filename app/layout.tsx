@@ -7,7 +7,7 @@ import Navbar from './components/ui/Navbar';
 import Footer from './components/ui/Footer';
 
 export const metadata: Metadata = {
-  title: 'Tales For Nights',
+  title: 'Tales For Nights 💤',
   description: 'Dive into the world of tales which make you cry before bed',
 };
 
@@ -23,7 +23,7 @@ export default function RootLayout({
           <AuthProvider>
             <>
             <Navbar />
-            <main className="container mx-auto px-4 flex-1 min-h-[86vh]">
+            <main className="container mx-auto px-2 sm:px-4 flex-1 min-h-[86vh]">
               {children}
             </main>
             <Footer />

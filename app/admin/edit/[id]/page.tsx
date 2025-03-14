@@ -3,7 +3,7 @@
 'use client';
 
 import TaleForm from '../../../components/tales/TaleForm';
-import { useGetTaleByIdQuery, useUpdateTaleMutation } from '../../../store/apis/talesApi';
+// import { useGetTaleByIdQuery, useUpdateTaleMutation } from '../../../store/apis/talesApi';
 import { useParams, useRouter } from 'next/navigation';
 import { TaleFormData } from '../../../types';
 import Link from 'next/link';

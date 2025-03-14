@@ -33,9 +33,9 @@ export const talesApi = createApi({
           : [{ type: 'Tales', id: 'LIST' }],
     }),
     
-    getTaleById: builder.query<Tale, string>({
+    getTaleById: builder.query<Tale[], string>({
       query: (id) => `/tales/${id}`,
-      transformResponse: (response: ApiResponse<Tale>) => response.data as Tale,
+      transformResponse: (response: ApiResponse<Tale[]>) => response.data as Tale[],
       providesTags: (result, error, id) => [{ type: 'Tale', id }],
     }),
     

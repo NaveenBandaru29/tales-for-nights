@@ -33,9 +33,18 @@ export async function GET(request: NextRequest, { params }: any) {
       );
     }
 
+    const currentCreatedAt = tale.createdAt;
+
+    const prevTale = await Tale.findOne({ createdAt: { $lt: currentCreatedAt } })
+    .sort({ createdAt: -1 }); 
+  
+    const nextTale = await Tale.findOne({ createdAt: { $gt: currentCreatedAt } })
+      .sort({ createdAt: 1 });
+
+    const data = [nextTale,tale,prevTale]
     return NextResponse.json({
       success: true,
-      data: tale,
+      data,
     });
   } catch (error) {
     console.error('Error fetching tale:', error);
