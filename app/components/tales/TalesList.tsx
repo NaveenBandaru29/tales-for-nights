@@ -8,6 +8,7 @@ import { useGetTalesQuery, useDeleteTaleMutation } from '../../store/apis/talesA
 import TaleCard from './TaleCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { Tale } from '@/app/types';
 
 export default function TalesList() {
   const { data: tales = [], isLoading, error } = useGetTalesQuery();
@@ -69,7 +70,7 @@ export default function TalesList() {
   }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {tales.map((tale) => (
+      {tales.map((tale:Tale) => (
         <div key={tale._id} className="relative">
           {deleteConfirm === tale._id && (
             <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center z-10 rounded-lg shadow-md">

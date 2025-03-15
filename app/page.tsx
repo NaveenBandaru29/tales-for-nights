@@ -2,11 +2,12 @@
 import { Suspense } from 'react';
 import TalesList from './components/tales/TalesList';
 import AudioPlayer from './components/ui/AudioPlayer/AudioPlayer';
+import NavTags from './components/ui/Navtags/NavTags';
 
 export default function HomePage() {
   return (
     <main className="container mx-auto px-4 py-4">
-      {/* <NavTags /> */}
+      <NavTags />
       <div className='flex gap-4 justify-between items-center mb-8'>
         <h1 className="text-2xl sm:text-3xl font-bold ">Tales Collection</h1>
         <AudioPlayer />

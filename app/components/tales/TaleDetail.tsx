@@ -65,7 +65,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
           prevTale?._id
             ? "bg-blue-200/50 text-blue-500/50 active:bg-blue-400 duration-300"
             : "bg-gray-200/50 text-gray-500/50 "
-        } text-4xl rounded-full p-1 fixed top-[50%] left-[2px] sm:left-[1%] md:left-[2%] lg:left-[3%]`}
+        } text-4xl rounded-full p-1 fixed top-[50%] left-[2px] sm:left-[1%] md:left-[2%] lg:left-[3%] cursor-pointer`}
         disabled={!prevTale?._id}
         onClick={() => navigateToTaleById(prevTale?._id)}
       >
@@ -76,7 +76,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
           nextTale?._id
             ? "bg-blue-200/50 text-blue-500/50 active:bg-blue-400 duration-300"
             : "bg-gray-200/50 text-gray-500/50 "
-        } text-4xl rounded-full p-1 fixed top-[50%] right-[2px] sm:right-[1%] md:right-[2%] lg:right-[3%]`}
+        } text-4xl rounded-full p-1 fixed top-[50%] right-[2px] sm:right-[1%] md:right-[2%] lg:right-[3%] cursor-pointer`}
         disabled={!nextTale?._id}
         onClick={() => navigateToTaleById(nextTale?._id)}
       >

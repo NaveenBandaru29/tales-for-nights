@@ -16,7 +16,11 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
   const isAdmin = user?.isAdmin;
   
   // Format the date
-  const formattedDate = new Date(tale.updatedAt).toLocaleDateString();
+  const formattedDate = new Date(tale.createdAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });;
   
   // Truncate description if it's too long
   const truncatedDescription = tale.description.length > 150

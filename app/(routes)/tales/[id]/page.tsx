@@ -2,9 +2,9 @@
 // app/tales/[id]/page.tsx
 'use client';
 
-import TaleDetail from '../../components/tales/TaleDetail';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import TaleDetail from '@/app/components/tales/TaleDetail';
 
 export default function TaleDetailPage() {
   const params = useParams();

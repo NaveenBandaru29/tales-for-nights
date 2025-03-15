@@ -1,5 +1,5 @@
+import NavTags from '@/app/components/ui/Navtags/NavTags'
 import React from 'react'
-import NavTags from '../components/ui/Navtags/NavTags'
 
 const QuotesPage = () => {
   return (

@@ -12,11 +12,19 @@ export interface NavChipProps{
 const NavChip = ({path,name}:NavChipProps) => {
     const pathname = usePathname()
     const isActive = (pathname === path)
-    // console.log("path",pathname,path,isActive)
     
   return (
-        <Link href={path} className={`text-white px-4 py-1 rounded-full hover:bg-blue-400 duration-300 ${isActive? "bg-blue-500" :"bg-gray-400"}`}>
+        <Link href={path} className={`relative text-white text-[16px] sm:text-md px-3 sm:px-4 py-1 rounded-full hover:bg-blue-400 duration-300 ${isActive? "bg-blue-500" :"bg-gray-400"} `}>
             {name}
+            {
+                path === "/raw" && 
+            <div className='absolute top-[2px] right-[2px]'>
+                <span className="relative flex size-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex size-2 rounded-full bg-red-500"></span>
+                </span>
+            </div>
+            }
         </Link>
   )
 }

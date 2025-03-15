@@ -4,9 +4,11 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import LoginForm from '../components/auth/LoginForm';
+// import { RootState } from '../store';
+// import LoginForm from '../components/auth/LoginForm';
 import Link from 'next/link';
+import { RootState } from '@/app/store';
+import LoginForm from '@/app/components/auth/LoginForm';
 
 export default function LoginPage() {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
