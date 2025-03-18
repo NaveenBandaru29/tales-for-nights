@@ -1,12 +1,14 @@
 export interface Raw {
     _id: string;
     content: string;
+    pinned:boolean
     createdAt: string;
     updatedAt: string;
   }
   
   export interface RawFormData {
     content: string;
+    pinned:boolean
   }
   
   export interface PaginationParams {

@@ -65,7 +65,7 @@ export async function PUT(request: NextRequest, { params }: any) {
     
     const { id } = await params;
     const body = await request.json();
-    const { content } = body;
+    const { content, pinned } = body;
     
     if (!content) {
       return NextResponse.json(
@@ -76,7 +76,7 @@ export async function PUT(request: NextRequest, { params }: any) {
     
     const updatedRaw = await Raw.findByIdAndUpdate(
       id,
-      { content },
+      { content, pinned },
       { new: true, runValidators: true }
     );
     

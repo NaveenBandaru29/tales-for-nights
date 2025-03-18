@@ -20,6 +20,9 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
   });;
   
   // Truncate description if it's too long
@@ -33,8 +36,8 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
         <div className="p-4 sm:p-6">
           <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-800 line-clamp-2">{tale.title}</h3>
           <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-3">{truncatedDescription}</p>
-          <div className="text-xs sm:text-sm text-gray-500">
-            Created: {formattedDate}
+          <div className="text-xs sm:text-sm text-gray-500 flex justify-end">
+            <span>{formattedDate}</span>
           </div>
         </div>
       </Link>

@@ -14,6 +14,7 @@ import RawItem from "./RawItem";
 import Pagination from "../ui/Pagination";
 import RawEditForm from "./RawEditForm";
 import RawDelete from "./RawDelete";
+import RawPin from "./RawPin"
 import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
 import { Raw } from "@/app/types/Raw";
 
@@ -29,6 +30,7 @@ export default function RawList() {
   );
   const isAdmin = isAuthenticated && user?.isAdmin;
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [pinConfirm,setPinConfirm] = useState<string | null>(null)
   const [edit, setEdit] = useState<string | null>(null);
   const [deleteRaw, { isLoading: isDeleting }] = useDeleteRawMutation();
   const [addRaw, setAddRaw] = useState<boolean>(false);
@@ -59,9 +61,9 @@ export default function RawList() {
   const [updateRaw, { isLoading: isUpdating }] = useUpdateRawMutation();
 
   // Handle saving updates to RAW content
-  const handleSave = async (id: string, content: string) => {
+  const handleSave = async (id: string, content: string,pinned:boolean) => {
     try {
-      await updateRaw({ id, rawData: { content } }).unwrap();
+      await updateRaw({ id, rawData: { content,pinned } }).unwrap();
       setEdit(null); // Clear edit mode after saving
       setContent(""); // Clear the content textarea
     } catch (err) {
@@ -85,6 +87,21 @@ export default function RawList() {
     setAddRaw(false)
   };
 
+  const handlePin = async (id:string,pinned:boolean,content:string) =>{
+    if(pinConfirm === id){
+      try {
+        await updateRaw({ id, rawData: { content,pinned } }).unwrap();
+      } catch (err) {
+        console.error("Failed to update RAW:", err);
+      }
+      setPinConfirm(null)
+    }
+    else{
+      setPinConfirm(id)
+    }
+    setAddRaw(false)
+  }
+
   const handleEdit =(raw:Raw) =>{
     setAddRaw(false)
     setEdit(raw._id)
@@ -97,7 +114,7 @@ export default function RawList() {
         <SearchBar onSearch={handleSearch} />
         {isAdmin && (
           <button
-            className="text-4xl "
+            className="text-5xl  active:scale-95 duration-300"
             onClick={() => setAddRaw((prev: boolean) => !prev)}
           >
             {addRaw ? (
@@ -109,7 +126,7 @@ export default function RawList() {
         )}
       </div>
 
-      {isAdmin && addRaw && <RawForm  />}
+      {isAdmin && addRaw && <RawForm handleFormClose={()=>setAddRaw(false)} />}
 
       {isLoading ? (
         <div className="text-center py-8">
@@ -140,12 +157,22 @@ export default function RawList() {
               {edit === raw._id && isAdmin && (
                 <RawEditForm
                   content={content}
-                  handleSave={() => handleSave(raw._id, content)}
+                  handleSave={() => handleSave(raw._id, content,raw.pinned)}
                   isUpdating={isUpdating}
                   setContent={setContent}
                   handleCancel={() => setEdit(null)}
                 />
               )}
+              {
+                pinConfirm === raw._id && isAdmin &&(
+                  <RawPin
+                    handleCancel={()=>setPinConfirm(null)}
+                    isPinning={isUpdating}
+                    handlePin={()=>handlePin(raw._id,!raw.pinned,raw.content)}
+                    pinned={raw.pinned}
+                  />
+                )
+              }
               <RawItem
                 key={raw._id}
                 raw={raw}
@@ -155,6 +182,8 @@ export default function RawList() {
                     ? () => handleEdit(raw) : undefined
                 }
                 onDelete={isAdmin ? () => setDeleteConfirm(raw._id) : undefined}
+                onPin= {isAdmin? () => setPinConfirm(raw._id):undefined}
+                pinned = {isAdmin?raw.pinned:undefined}
               />
             </div>
           ))}

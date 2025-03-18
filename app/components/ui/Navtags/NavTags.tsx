@@ -8,7 +8,7 @@ const navChips:NavChipProps[] = [
     path:"/"
   },
   {
-    name:"RAW",
+    name:"RAW ☠️",
     path:"/raw"
   },
   // {

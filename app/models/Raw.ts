@@ -14,6 +14,10 @@ const RawSchema: Schema = new Schema(
       required: [true, 'Content is required'],
       trim: true,
     },
+    pinned: {  // Define the pinned field
+      type: Boolean,
+      default: false, // Default value is false, you can change it if needed
+    },
   },
   {
     timestamps: true,

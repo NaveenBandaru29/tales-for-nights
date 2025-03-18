@@ -4,7 +4,7 @@
 import { useCreateRawMutation } from '@/app/store/apis/rawApi';
 import { useState } from 'react';
 
-export default function RawForm() {
+export default function RawForm({handleFormClose}:{handleFormClose:()=>void}) {
   const [content, setContent] = useState('');
   const [createRaw, { isLoading }] = useCreateRawMutation();
   
@@ -13,11 +13,12 @@ export default function RawForm() {
     if (!content.trim()) return;
     
     try {
-      await createRaw({ content }).unwrap();
+      await createRaw({ content,pinned:false }).unwrap();
       setContent(''); // Clear form after successful submission
     } catch (err) {
       console.error('Failed to create RAW:', err);
     }
+    handleFormClose()
   };
 
   return (
