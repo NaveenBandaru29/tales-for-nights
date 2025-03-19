@@ -1,4 +1,4 @@
-import NavTags from '@/app/components/ui/Navtags/NavTags'
+import NavTags from '@/app/components/common/Navtags/NavTags'
 import React from 'react'
 
 const LyricsPage = () => {

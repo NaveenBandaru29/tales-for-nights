@@ -1,149 +1,133 @@
 // app/admin/page.tsx
-'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
-import AuthGuard from '../components/auth/AuthGuard';
-import { useGetTalesQuery, useDeleteTaleMutation } from '../store/apis/talesApi';
-import { logout } from '../store/slices/authSlice';
-import { Tale } from '../types';
+// Use client-side rendering with React hooks
+"use client";
+
+// Import necessary hooks and components
+import { useEffect, useState } from "react"; // React hooks for managing state and side effects
+import AuthGuard from "../components/auth/AuthGuard"; // Component that checks if user is authenticated and authorized as an admin
+import {
+  useGetTalesQuery, // API hook for fetching tales data
+  useDeleteTaleMutation, // API hook for deleting a tale
+} from "../store/apis/talesApi"; 
+import { useDeleteRawMutation, useGetRawsQuery } from "../store/apis/rawApi"; // API hooks for fetching and deleting raw items
+import DeleteModal from "../components/ui/DeleteModal"; // Modal component to confirm deletion
+import AdminManageSection from "../components/admin/AdminManageSection"; // Section component to manage tales and raws
 
 export default function AdminPage() {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.auth);
-  const { data: tales, isLoading, isError,refetch } = useGetTalesQuery();
+  // Fetch tales data using the API query hook
+  const { data: tales, isLoading, isError, refetch } = useGetTalesQuery();
+
+  // Fetch raw data using the API query hook
+  const {
+    data: raws,
+    isLoading: israwLoading,
+    isError: isRawError,
+    refetch: rawRefetch,
+  } = useGetRawsQuery({ limit: 2, page: 1 });
+
+  // API mutation hooks for deleting a tale and raw
   const [deleteTale, { isLoading: isDeleting }] = useDeleteTaleMutation();
-  const [selectedTale, setSelectedTale] = useState<string | null>(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteRaw, { isLoading: isRawDeleing }] = useDeleteRawMutation();
+
+  // State variables for managing the selected tale, raw, and modal visibility
+  const [selectedTale, setSelectedTale] = useState<string | null>(null); // Stores the ID of the selected tale to be deleted
+  const [selectedRaw, setSelectedRaw] = useState<string | null>(null); // Stores the ID of the selected raw to be deleted
+  const [showDeleteTaleModal, setShowDeleteTaleModal] = useState(false); // Controls visibility of the tale deletion confirmation modal
+  const [showDeleteRawModal, setShowDeleteRawModal] = useState(false); // Controls visibility of the raw deletion confirmation modal
+
+  // Refetch data when the component is mounted or when the dependency changes
   useEffect(() => {
-    refetch()
-  }, [refetch]);
+    refetch(); // Refetch tales data
+    rawRefetch(); // Refetch raw data
+  }, [refetch, rawRefetch]);
 
-  // const handleLogout = () => {
-  //   dispatch(logout());
-  //   router.push('/');
-  // };
-
-  const handleDelete = async () => {
+  // Handler to delete a selected tale
+  const handleTaleDelete = async () => {
     if (selectedTale) {
       try {
-        await deleteTale(selectedTale).unwrap();
-        setShowDeleteModal(false);
-        setSelectedTale(null);
+        await deleteTale(selectedTale).unwrap(); // Call the deleteTale mutation
+        setShowDeleteTaleModal(false); // Close the deletion modal
+        setSelectedTale(null); // Clear the selected tale
       } catch (error) {
-        console.error('Failed to delete tale:', error);
+        console.error("Failed to delete tale:", error); // Log error if deletion fails
       }
     }
   };
 
-  const openDeleteModal = (id: string) => {
-    setSelectedTale(id);
-    setShowDeleteModal(true);
+  // Handler to delete a selected raw item
+  const handleRawDelete = async () => {
+    if (selectedRaw) {
+      try {
+        await deleteRaw(selectedRaw).unwrap(); // Call the deleteRaw mutation
+        setShowDeleteRawModal(false); // Close the deletion modal
+        setSelectedRaw(null); // Clear the selected raw
+      } catch (error) {
+        console.error("Failed to delete RAW:", error); // Log error if deletion fails
+      }
+    }
+  };
+
+  // Open the tale deletion modal with the selected tale ID
+  const openDeleteTaleModal = (id: string) => {
+    setSelectedTale(id); // Set the selected tale ID
+    setShowDeleteTaleModal(true); // Show the modal
+  };
+
+  // Open the raw deletion modal with the selected raw ID
+  const openDeleteRawModal = (id: string) => {
+    setSelectedRaw(id); // Set the selected raw ID
+    setShowDeleteRawModal(true); // Show the modal
   };
 
   return (
+    // AuthGuard ensures the page is accessible only to admin users
     <AuthGuard requireAdmin>
       <div className="min-h-screen bg-gray-50">
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Manage Tales</h2>
-            <Link
-              href="/admin/create"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              Add New Tale
-            </Link>
-          </div>
+        {/* AdminManageSection to display and manage tales */}
+        <AdminManageSection
+          isError={isError} // Show error if tales data fetching fails
+          errorText="Error loading tales. Please try again." // Error message
+          isLoading={isLoading} // Show loading state while fetching data
+          loadingText="Loading Tales..." // Loading message
+          items={tales} // Pass the tales data
+          openDeleteModal={(id) => openDeleteTaleModal(id)} // Function to open delete modal for a tale
+          manageItemsTitle="Tales" // Title for the section
+          seeMoreLink="/" // Link to view more tales
+        />
 
-          {isLoading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-          ) : isError ? (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-              Error loading tales. Please try again.
-            </div>
-          ) : tales && tales.length > 0 ? (
-            <>
-            <div className="bg-white shadow overflow-hidden sm:rounded-md">
-              <ul className="divide-y divide-gray-200">
-                {tales.slice(0,2).map((tale) => (
-                  <li key={tale._id}>
-                    <div className="px-6 py-4 flex items-center justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center">
-                          <h3 className="text-lg font-medium text-gray-900 truncate">{tale.title}</h3>
-                        </div>
-                        <p className="mt-1 text-sm text-gray-500 truncate">{tale.description}</p>
-                        <p className="mt-1 text-xs text-gray-400">
-                          Last updated: {new Date(tale.updatedAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                      <div className="flex space-x-2 flex-col gap-2 sm:flex-row">
-                        <Link
-                          href={`/tales/${tale._id}`}
-                          className="w-20 text-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                          View
-                        </Link>
-                        <Link
-                          href={`/admin/edit/${tale._id}`}
-                          className="w-20 text-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        >
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => openDeleteModal(tale._id)}
-                          className="w-20 text-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className='text-right p-2'>
-            <Link href={"/"} className='text-blue-600 font-semibold hover:text-blue-400'>See More Tales</Link>
-            </div>
-            </>
-          ) : (
-            <div className="bg-white shadow overflow-hidden sm:rounded-md p-6 text-center">
-              <p className="text-gray-500">No tales available. Create your first tale!</p>
-            </div>
-          )}
-        </main>
+        {/* AdminManageSection to display and manage raws */}
+        <AdminManageSection
+          isError={isRawError} // Show error if raws data fetching fails
+          errorText="Error loading raws. Please try again." // Error message
+          isLoading={israwLoading} // Show loading state while fetching data
+          loadingText="Loading Raws..." // Loading message
+          items={raws?.data} // Pass the raws data
+          openDeleteModal={(id) => openDeleteRawModal(id)} // Function to open delete modal for a raw
+          manageItemsTitle="Raws" // Title for the section
+          seeMoreLink="/raw" // Link to view more raws
+        />
 
-        {/* Delete Confirmation Modal */}
-        {showDeleteModal && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Confirm Delete</h3>
-              <p className="text-sm text-gray-500 mb-6">
-                Are you sure you want to delete this tale? This action cannot be undone.
-              </p>
-              <div className="flex justify-end space-x-3">
-                <button
-                  onClick={() => setShowDeleteModal(false)}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                >
-                  {isDeleting ? 'Deleting...' : 'Delete'}
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* Delete Confirmation Modal for tales */}
+        {showDeleteTaleModal && (
+          <DeleteModal
+            title="Confirm Delete" // Modal title
+            description="Are you sure you want to delete this tale? This action cannot be undone." // Description of the action
+            isDeleting={isDeleting} // Show loading state while deleting
+            onClose={() => setShowDeleteTaleModal(false)} // Close the modal
+            onDelete={handleTaleDelete} // Function to execute on deletion
+          />
+        )}
+
+        {/* Delete Confirmation Modal for raws */}
+        {showDeleteRawModal && (
+          <DeleteModal
+            title="Confirm Delete" // Modal title
+            description="Are you sure you want to delete this RAW? This action cannot be undone." // Description of the action
+            isDeleting={isRawDeleing} // Show loading state while deleting
+            onClose={() => setShowDeleteRawModal(false)} // Close the modal
+            onDelete={handleRawDelete} // Function to execute on deletion
+          />
         )}
       </div>
     </AuthGuard>

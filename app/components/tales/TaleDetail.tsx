@@ -7,6 +7,7 @@ import { RootState } from "../../store";
 import Link from "next/link";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import { useRouter } from "next/navigation";
+import Loader from "../ui/Loader";
 
 interface TaleDetailProps {
   id: string;
@@ -22,10 +23,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
 
   if (isLoading) {
     return (
-      <div className="text-center py-8">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-        <p className="mt-2 text-gray-600">Loading tale...</p>
-      </div>
+      <Loader loadingText="Loading Tale..." />
     );
   }
 

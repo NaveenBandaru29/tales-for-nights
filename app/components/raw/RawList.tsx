@@ -17,6 +17,7 @@ import RawDelete from "./RawDelete";
 import RawPin from "./RawPin"
 import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
 import { Raw } from "@/app/types/Raw";
+import Loader from "../ui/Loader";
 
 export default function RawList() {
   const [searchParams, setSearchParams] = useState<any>({
@@ -128,12 +129,8 @@ export default function RawList() {
 
       {isAdmin && addRaw && <RawForm handleFormClose={()=>setAddRaw(false)} />}
 
-      {isLoading ? (
-        <div className="text-center py-8">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-          <p className="mt-2 text-gray-600">Loading...</p>
-        </div>
-      ) : error ? (
+      {isLoading ? (<Loader loadingText="Loading Raws..." />) 
+      : error ? (
         <div className="bg-red-100 text-red-700 p-4 rounded-lg">
           Error loading RAWs. Please try again.
         </div>

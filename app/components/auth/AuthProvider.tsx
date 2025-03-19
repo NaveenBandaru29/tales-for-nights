@@ -3,7 +3,6 @@
 'use client';
 
 import axios from 'axios';
-import { headers } from 'next/headers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/slices/authSlice';

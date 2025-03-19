@@ -12,7 +12,7 @@ import AuthGuard from '@/app/components/auth/AuthGuard';
 
 export default function CreateTalePage() {
   const [createTale, { isLoading, error }] = useCreateTaleMutation();
-  const router = useRouter();
+  // const router = useRouter();
 
   // const handleSubmit = async (formData: TaleFormData) => {
   //   try {

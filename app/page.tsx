@@ -1,8 +1,8 @@
 // app/page.tsx
 import { Suspense } from 'react';
 import TalesList from './components/tales/TalesList';
-import AudioPlayer from './components/ui/AudioPlayer/AudioPlayer';
-import NavTags from './components/ui/Navtags/NavTags';
+import AudioPlayer from './components/common/AudioPlayer/AudioPlayer';
+import NavTags from './components/common/Navtags/NavTags';
 
 export default function HomePage() {
   return (
