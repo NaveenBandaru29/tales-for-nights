@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import RawList from '@/app/components/raw/RawList';
 import { RootState } from '@/app/store';
-import NavTags from '@/app/components/ui/Navtags/NavTags';
+import NavTags from '@/app/components/common/Navtags/NavTags';
 
 export default function RawPage() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);

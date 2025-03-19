@@ -9,6 +9,7 @@ import TaleCard from './TaleCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { Tale } from '@/app/types';
+import Loader from '../ui/Loader';
 
 export default function TalesList() {
   const { data: tales = [], isLoading, error } = useGetTalesQuery();
@@ -38,10 +39,7 @@ export default function TalesList() {
 
   if (isLoading) {
     return (
-      <div className="text-center py-8">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-        <p className="mt-2 text-gray-600">Loading tales...</p>
-      </div>
+      <Loader loadingText='Loading Tales...' />
     );
   }
 
