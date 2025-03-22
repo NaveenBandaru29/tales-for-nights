@@ -5,14 +5,15 @@
 
 // Import necessary hooks and components
 import { useEffect, useState } from "react"; // React hooks for managing state and side effects
+import dynamic from "next/dynamic";
 import AuthGuard from "../components/auth/AuthGuard"; // Component that checks if user is authenticated and authorized as an admin
 import {
   useGetTalesQuery, // API hook for fetching tales data
   useDeleteTaleMutation, // API hook for deleting a tale
 } from "../store/apis/talesApi"; 
 import { useDeleteRawMutation, useGetRawsQuery } from "../store/apis/rawApi"; // API hooks for fetching and deleting raw items
-import DeleteModal from "../components/ui/DeleteModal"; // Modal component to confirm deletion
-import AdminManageSection from "../components/admin/AdminManageSection"; // Section component to manage tales and raws
+const DeleteModal = dynamic(()=>import("../components/ui/DeleteModal")) ; // Modal component to confirm deletion
+const AdminManageSection = dynamic(()=>import("../components/admin/AdminManageSection")) ; // Section component to manage tales and raws
 
 export default function AdminPage() {
   // Fetch tales data using the API query hook
@@ -83,7 +84,8 @@ export default function AdminPage() {
   return (
     // AuthGuard ensures the page is accessible only to admin users
     <AuthGuard requireAdmin>
-      <div className="min-h-screen bg-gray-50">
+      <div className="h-full bg-gray-50 container mx-auto">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* AdminManageSection to display and manage tales */}
         <AdminManageSection
           isError={isError} // Show error if tales data fetching fails
@@ -106,7 +108,8 @@ export default function AdminPage() {
           openDeleteModal={(id) => openDeleteRawModal(id)} // Function to open delete modal for a raw
           manageItemsTitle="Raws" // Title for the section
           seeMoreLink="/raw" // Link to view more raws
-        />
+          />
+      </main>
 
         {/* Delete Confirmation Modal for tales */}
         {showDeleteTaleModal && (

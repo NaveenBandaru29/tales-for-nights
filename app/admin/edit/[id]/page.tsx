@@ -4,16 +4,15 @@
 
 import TaleForm from '../../../components/tales/TaleForm';
 // import { useGetTaleByIdQuery, useUpdateTaleMutation } from '../../../store/apis/talesApi';
-import { useParams, useRouter } from 'next/navigation';
-import { TaleFormData } from '../../../types';
+import { useParams/* , useRouter */ } from 'next/navigation';
+// import { TaleFormData } from '../../../types';
 import Link from 'next/link';
-import AuthCheck from '../../../components/auth/AuthCheck';
 import AuthGuard from '@/app/components/auth/AuthGuard';
 
 export default function EditTalePage() {
   const params = useParams();
   const id = params.id as string;
-  const router = useRouter();
+  // const router = useRouter();
 
   return (
     <AuthGuard requireAdmin>

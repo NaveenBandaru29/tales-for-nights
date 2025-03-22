@@ -4,7 +4,9 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import TaleDetail from '@/app/components/tales/TaleDetail';
+import dynamic from 'next/dynamic';
+// import TaleDetail from '@/app/components/tales/TaleDetail';
+const TaleDetail = dynamic(()=>import('@/app/components/tales/TaleDetail'))
 
 export default function TaleDetailPage() {
   const params = useParams();

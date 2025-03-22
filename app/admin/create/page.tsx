@@ -1,17 +1,13 @@
 
 // app/admin/create/page.tsx
-'use client';
 
 import TaleForm from '../../components/tales/TaleForm';
-import { useCreateTaleMutation } from '../../store/apis/talesApi';
-import { useRouter } from 'next/navigation';
-import { TaleFormData } from '../../types';
+// import { useCreateTaleMutation } from '../../store/apis/talesApi';
 import Link from 'next/link';
-import AuthCheck from '../../components/auth/AuthCheck';
 import AuthGuard from '@/app/components/auth/AuthGuard';
 
 export default function CreateTalePage() {
-  const [createTale, { isLoading, error }] = useCreateTaleMutation();
+  // const [createTale, { isLoading, error }] = useCreateTaleMutation();
   // const router = useRouter();
 
   // const handleSubmit = async (formData: TaleFormData) => {
@@ -34,11 +30,11 @@ export default function CreateTalePage() {
         
         <h1 className="text-3xl font-bold mb-8">Create New Tale</h1>
         
-        {error && (
+        {/* {error && (
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
             <p>Error: Failed to create tale. Please try again.</p>
           </div>
-        )}
+        )} */}
         
         <TaleForm  />
       </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import AdminManageCard from './AdminManageCard'
 import Link from 'next/link'
-import Loader from '../ui/Loader'
+import { Loader } from '../ui/Loader'
 
 interface AdminManageSectionProps{
     isLoading:boolean,
@@ -16,7 +16,8 @@ interface AdminManageSectionProps{
 
 const AdminManageSection = ({isError,isLoading,errorText,loadingText,items,openDeleteModal,seeMoreLink,manageItemsTitle}:AdminManageSectionProps) => {
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    // <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <>
     <div className="flex justify-between items-center mb-6">
       <h2 className="text-xl font-semibold text-gray-900">
         Manage {manageItemsTitle || ""}
@@ -69,8 +70,9 @@ const AdminManageSection = ({isError,isLoading,errorText,loadingText,items,openD
     //     </p>
     //   </div>
     // )
-    }
-  </main>
+        }
+        </>
+  // </main>
   )
 }
 

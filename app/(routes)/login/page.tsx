@@ -8,7 +8,8 @@ import { useSelector } from 'react-redux';
 // import LoginForm from '../components/auth/LoginForm';
 import Link from 'next/link';
 import { RootState } from '@/app/store';
-import LoginForm from '@/app/components/auth/LoginForm';
+import dynamic from 'next/dynamic';
+const LoginForm = dynamic(()=>import('@/app/components/auth/LoginForm')) ;
 
 export default function LoginPage() {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);

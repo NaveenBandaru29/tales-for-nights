@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { TaleFormData } from '../../types';
 import { useCreateTaleMutation, useUpdateTaleMutation, useGetTaleByIdQuery } from '../../store/apis/talesApi';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 
 interface TaleFormProps {
   id?: string;

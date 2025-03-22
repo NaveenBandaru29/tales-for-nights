@@ -7,8 +7,9 @@ import { RootState } from "../../store";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import LogoutButton from "../auth/LoginButton";
-import { IoClose } from "react-icons/io5";
 import Image from "next/image";
+import { IconButton } from "@mui/material"
+import {MenuRounded,CloseRounded} from '@mui/icons-material';
 
 export default function Navbar() {
   const { isAuthenticated, user } = useSelector(
@@ -44,6 +45,7 @@ export default function Navbar() {
                 alt="tfn_logo"
                 width={25}
                 height={25}
+                style={{ width: "auto", height: "auto" }}
               />
               Tales For <span className="text-[24px] font-bold">Nights</span>
             </Link>
@@ -52,29 +54,9 @@ export default function Navbar() {
             <div className="md:hidden flex">
               {
                 isAuthenticated &&
-              <button
-                onClick={toggleMenu}
-                className="text-white focus:outline-none"
-              >
-                {!isMenuOpen ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="h-8 w-8"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    ></path>
-                  </svg>
-                ) : (
-                  <IoClose className="text-4xl font-bold" />
-                )}
-              </button>
+                <IconButton onClick={toggleMenu}>
+                  {isMenuOpen?<CloseRounded sx={{color:"whitesmoke"}} fontSize="large" />:<MenuRounded sx={{color:"whitesmoke"}} fontSize="large" />}
+                </IconButton>
               }
             </div>
 
