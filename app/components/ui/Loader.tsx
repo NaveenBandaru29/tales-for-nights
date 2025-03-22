@@ -1,6 +1,7 @@
+import { Backdrop, CircularProgress } from '@mui/material';
 import React from 'react'
 
-const Loader = ({loadingText}:{loadingText?:string}) => {
+export const Loader = ({loadingText}:{loadingText?:string}) => {
   return (
     <div className="text-center py-8">
         <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
@@ -9,5 +10,22 @@ const Loader = ({loadingText}:{loadingText?:string}) => {
   )
 }
 
-export default Loader
 
+export const LazyLoader: React.FC = () => {
+  return (
+    <Backdrop
+      sx={{
+        color: '#fff',
+        zIndex: 1300,  // Static value
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      open={true}
+    >
+      <CircularProgress color="inherit" />
+    </Backdrop>
+  );
+};
+
+export default LazyLoader;

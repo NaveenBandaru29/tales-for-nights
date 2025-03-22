@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import {
@@ -17,7 +17,7 @@ import RawDelete from "./RawDelete";
 import RawPin from "./RawPin"
 import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
 import { Raw } from "@/app/types/Raw";
-import Loader from "../ui/Loader";
+import { Loader } from "../ui/Loader";
 
 export default function RawList() {
   const [searchParams, setSearchParams] = useState<any>({
@@ -37,7 +37,6 @@ export default function RawList() {
   const [addRaw, setAddRaw] = useState<boolean>(false);
   const { data, isLoading, error } = useGetRawsQuery(searchParams);
   const raws = data?.data || [];
-  const [content, setContent] = useState<string>("");
   const totalPages = data?.pagination?.pages || 1;
 
   // Handle search query update
@@ -62,11 +61,17 @@ export default function RawList() {
   const [updateRaw, { isLoading: isUpdating }] = useUpdateRawMutation();
 
   // Handle saving updates to RAW content
-  const handleSave = async (id: string, content: string,pinned:boolean) => {
+  const handleSave = async (id: string, raw: Raw) => {
+    const {content,pinned,tags} = raw
+    if (!content.trim()) return;
+    const rawData = {
+      content,
+      pinned,
+      tags
+    }
     try {
-      await updateRaw({ id, rawData: { content,pinned } }).unwrap();
+      await updateRaw({ id, rawData }).unwrap();
       setEdit(null); // Clear edit mode after saving
-      setContent(""); // Clear the content textarea
     } catch (err) {
       console.error("Failed to update RAW:", err);
     }
@@ -88,10 +93,10 @@ export default function RawList() {
     setAddRaw(false)
   };
 
-  const handlePin = async (id:string,pinned:boolean,content:string) =>{
+  const handlePin = async (id:string,pinned:boolean,content:string,tags:string[]) =>{
     if(pinConfirm === id){
       try {
-        await updateRaw({ id, rawData: { content,pinned } }).unwrap();
+        await updateRaw({ id, rawData: { content,pinned,tags } }).unwrap();
       } catch (err) {
         console.error("Failed to update RAW:", err);
       }
@@ -103,16 +108,22 @@ export default function RawList() {
     setAddRaw(false)
   }
 
-  const handleEdit =(raw:Raw) =>{
+  const handleEditClick =(raw:Raw) =>{
     setAddRaw(false)
     setEdit(raw._id)
-    setContent(raw.content)
+    setDeleteConfirm(null)
+  }
+
+  const handleDeleteClick = (id:string) => {
+    setDeleteConfirm(id)
+    setAddRaw(false)
+    setEdit(null)
   }
 
   return (
     <div className="container mx-auto">
       <div className="mb-6 flex gap-2 sm:gap-4">
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar placeholder="Search by Content/Tags..." onSearch={handleSearch} />
         {isAdmin && (
           <button
             className="text-5xl  active:scale-95 duration-300"
@@ -141,7 +152,7 @@ export default function RawList() {
             : "No RAWs available"}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="w-full flex gap-4 flex-col">
           {raws.map((raw) => (
             <div key={raw._id} className="relative">
               {deleteConfirm === raw._id && (
@@ -153,10 +164,11 @@ export default function RawList() {
               )}
               {edit === raw._id && isAdmin && (
                 <RawEditForm
-                  content={content}
-                  handleSave={() => handleSave(raw._id, content,raw.pinned)}
+                  // content={content}
+                  raw={raw}
+                  handleSave={handleSave}
                   isUpdating={isUpdating}
-                  setContent={setContent}
+                  // setContent={setContent}
                   handleCancel={() => setEdit(null)}
                 />
               )}
@@ -165,23 +177,23 @@ export default function RawList() {
                   <RawPin
                     handleCancel={()=>setPinConfirm(null)}
                     isPinning={isUpdating}
-                    handlePin={()=>handlePin(raw._id,!raw.pinned,raw.content)}
+                    handlePin={()=>handlePin(raw._id,!raw.pinned,raw.content,raw.tags)}
                     pinned={raw.pinned}
                   />
                 )
               }
-              <RawItem
-                key={raw._id}
-                raw={raw}
-                isAdmin={isAdmin ? true : false}
-                onEdit={
-                  isAdmin
-                    ? () => handleEdit(raw) : undefined
-                }
-                onDelete={isAdmin ? () => setDeleteConfirm(raw._id) : undefined}
-                onPin= {isAdmin? () => setPinConfirm(raw._id):undefined}
-                pinned = {isAdmin?raw.pinned:undefined}
-              />
+              {edit !== raw._id &&  (
+                <RawItem
+                  key={raw._id}
+                  raw={raw}
+                  isAdmin={isAdmin ? true : false}
+                  onEdit={
+                    isAdmin
+                      ? () => handleEditClick(raw) : undefined
+                  }
+                  onDelete={isAdmin ? () => handleDeleteClick(raw._id) : undefined}
+                  onPin={isAdmin ? () => setPinConfirm(raw._id) : undefined}
+                />)}
             </div>
           ))}
 

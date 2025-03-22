@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Tale } from '../../types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { formatDate } from '@/app/utils/helpers';
 
 interface TaleCardProps {
   tale: Tale;
@@ -16,14 +17,14 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
   const isAdmin = user?.isAdmin;
   
   // Format the date
-  const formattedDate = new Date(tale.createdAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  });;
+  // const formattedDate = new Date(tale.createdAt).toLocaleDateString('en-US', {
+  //   year: 'numeric',
+  //   month: 'short',
+  //   day: 'numeric',
+  //   hour: '2-digit',
+  //   minute: '2-digit',
+  //   hour12: true,
+  // });
   
   // Truncate description if it's too long
   const truncatedDescription = tale.description.length > 150
@@ -37,7 +38,7 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
           <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-800 line-clamp-2">{tale.title}</h3>
           <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-3">{truncatedDescription}</p>
           <div className="text-xs sm:text-sm text-gray-500 flex justify-end">
-            <span>{formattedDate}</span>
+            <span>{formatDate(tale?.createdAt)}</span>
           </div>
         </div>
       </Link>

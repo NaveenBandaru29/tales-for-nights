@@ -7,7 +7,8 @@ import { RootState } from "../../store";
 import Link from "next/link";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import { useRouter } from "next/navigation";
-import Loader from "../ui/Loader";
+import { Loader } from "../ui/Loader";
+import { formatDate } from "@/app/utils/helpers";
 
 interface TaleDetailProps {
   id: string;
@@ -46,7 +47,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
     );
   }
 
-  const formattedDate = new Date(tale.createdAt).toLocaleDateString();
+  // const formattedDate = new Date(tale.createdAt).toLocaleDateString();
 
   const navigateToTaleById = (taleId: string | undefined) => {
     if (taleId) {
@@ -84,7 +85,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
         <h1 className="text-3xl font-bold mb-4 text-gray-900">{tale.title}</h1>
 
         <div className="text-sm text-gray-500 mb-6">
-          Created at: {formattedDate}
+          Created on: {formatDate(tale.createdAt)}
         </div>
 
         <div className="bg-gray-200 p-4 rounded-md mb-4">

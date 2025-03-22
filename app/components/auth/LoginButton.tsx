@@ -6,12 +6,10 @@
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import { useRouter } from 'next/navigation';
+import { Button } from '@mui/material';
 
-interface LogoutButtonProps {
-  className?: string;
-}
 
-export default function LogoutButton({ className = '' }: LogoutButtonProps) {
+export default function LogoutButton() {
   // const [logoutApi, { isLoading }] = useLogoutMutation();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -30,12 +28,15 @@ export default function LogoutButton({ className = '' }: LogoutButtonProps) {
   };
 
   return (
-    <button
+    <Button
       onClick={handleLogout}
+      variant='contained'
+      color="error"
+      className='w-full'
       // disabled={isLoading}
-      className={`px-2 py-3 w-[92vw] mb-2 sm:mb-0 text-left sm:flex sm:w-fit text-white bg-red-500 hover:bg-red-600 sm:py-2 sm:px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-red-300 ${className}`}
+      // className={`px-2 py-3 w-[92vw] mb-2 sm:mb-0 text-left sm:flex sm:w-fit text-white bg-red-500 hover:bg-red-600 sm:py-2 sm:px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 disabled:bg-red-300 ${className}`}
     >
       Logout
-    </button>
+    </Button>
   );
 }

@@ -1,16 +1,16 @@
 // app/raw/page.tsx
-'use client';
+// 'use client';
 
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/navigation';
-import RawList from '@/app/components/raw/RawList';
-import { RootState } from '@/app/store';
-import NavTags from '@/app/components/common/Navtags/NavTags';
+// import { useSelector } from 'react-redux';
+// import { useRouter } from 'next/navigation';
+// import { RootState } from '@/app/store';
+import dynamic from 'next/dynamic';
+const NavTags = dynamic(()=>import('@/app/components/common/Navtags/NavTags')) 
+const RawList = dynamic(()=>import('@/app/components/raw/RawList')) 
 
 export default function RawPage() {
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const router = useRouter();
+  // const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  // const router = useRouter();
   
   // Optional: Redirect unauthenticated users
   // useEffect(() => {
@@ -20,7 +20,8 @@ export default function RawPage() {
   // }, [isAuthenticated, router]);
   
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container max-w- mx-auto px-4 py-4">
+      {/* max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 */}
       <NavTags />
       <RawList />
     </div>

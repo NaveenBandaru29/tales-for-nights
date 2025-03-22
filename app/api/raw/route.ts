@@ -17,7 +17,12 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
     
     // Build query
-    const query = search ? { $text: { $search: search } } : {};
+    const query = search ? {
+      $or: [
+        { content: { $regex: search, $options: "i" } }, // Case-insensitive content search
+        { tags: { $regex: search, $options: "i" } }, // Case-insensitive tag search
+      ],
+    } : {};
     
     // Execute query with pagination
     const raws = await Raw.find(query)
@@ -73,7 +78,7 @@ export async function POST(request: NextRequest) {
     await connectToDatabase();
     
     const body = await request.json();
-    const { content,pinned } = body;
+    const { content,pinned, tags } = body;
     
     if (!content) {
       return NextResponse.json(
@@ -82,7 +87,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    const newRaw = await Raw.create({ content,pinned });
+    const newRaw = await Raw.create({ content,pinned,tags });
     
     return NextResponse.json({ success: true, data: newRaw }, { status: 201 });
   } catch (error) {

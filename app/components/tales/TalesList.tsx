@@ -9,7 +9,7 @@ import TaleCard from './TaleCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { Tale } from '@/app/types';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 
 export default function TalesList() {
   const { data: tales = [], isLoading, error } = useGetTalesQuery();

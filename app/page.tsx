@@ -1,8 +1,8 @@
 // app/page.tsx
-import { Suspense } from 'react';
-import TalesList from './components/tales/TalesList';
-import AudioPlayer from './components/common/AudioPlayer/AudioPlayer';
-import NavTags from './components/common/Navtags/NavTags';
+import dynamic from 'next/dynamic';
+const AudioPlayer = dynamic(()=>import('./components/common/AudioPlayer/AudioPlayer')) ;
+const NavTags = dynamic(()=>import('./components/common/Navtags/NavTags'))
+const TalesList  = dynamic(()=>import('./components/tales/TalesList')) ;
 
 export default function HomePage() {
   return (
@@ -12,9 +12,7 @@ export default function HomePage() {
         <h1 className="text-2xl sm:text-3xl font-bold ">Tales Collection</h1>
         <AudioPlayer />
       </div>
-      <Suspense fallback={<div className="text-center">Loading tales...</div>}>
-        <TalesList />
-      </Suspense>
+      <TalesList />
     </main>
   );
 }

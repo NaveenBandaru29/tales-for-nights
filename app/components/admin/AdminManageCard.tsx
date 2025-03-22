@@ -1,3 +1,4 @@
+import { formatDate } from "@/app/utils/helpers";
 import Link from "next/link";
 import React from "react";
 
@@ -9,7 +10,7 @@ interface AdminManageCardProps {
 const AdminManageCard = ({ item, openDeleteModal }: AdminManageCardProps) => {
   return (
     <li key={item._id}>
-      <div className="px-6 py-4 flex items-center justify-between">
+      <div className="px-6 py-4 flex items-center justify-between gap-2 sm:gap-4">
         <div className="flex-1 min-w-0">
           {item?.title && (
             <div className="flex items-center">
@@ -23,7 +24,7 @@ const AdminManageCard = ({ item, openDeleteModal }: AdminManageCardProps) => {
           </p>
           {item?.createdAt && (
             <p className="mt-1 text-xs text-gray-400">
-              Last updated: {new Date(item?.createdAt).toLocaleDateString()}
+              Created on: {formatDate(item?.createdAt)}
             </p>
           )}
         </div>
