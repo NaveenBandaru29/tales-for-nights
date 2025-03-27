@@ -17,6 +17,12 @@ export const tags:Tag[] = [
   { value: "feel pain", label: "Feel Pain" },
   { value: "mother earth", label: "Mother Earth" },
   { value: "sad truth", label: "Sad Truth" },
+  { value: "brotherhood", label: "Brotherhood" },
+  { value: "be young", label: "Be Young" },
+  { value: "corporate coolie", label: "Corporate Coolie" },
+  { value: "isn't it funny", label: "Isn't It Funny" },
+  { value: "socho zara", label: "Socho Zara" },
+  
 ];
 
 export default function RawForm({handleFormClose}:{handleFormClose:()=>void}) {

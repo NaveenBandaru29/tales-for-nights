@@ -32,7 +32,7 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
     : tale.description;
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full select-none">
       <Link href={`/tales/${tale._id}`} className="block flex-grow">
         <div className="p-4 sm:p-6">
           <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-800 line-clamp-2">{tale.title}</h3>
