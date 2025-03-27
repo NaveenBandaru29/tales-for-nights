@@ -5,7 +5,7 @@ import { Raw } from "@/app/types/Raw";
 import { TiPin } from "react-icons/ti";
 // import Chip from '@mui/material/Chip';
 import { FaHashtag } from "react-icons/fa6";
-import { Button } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { formatDate } from "@/app/utils/helpers";
 
 interface RawItemProps {
@@ -19,7 +19,7 @@ interface RawItemProps {
 export default function RawItem({ raw, isAdmin,onDelete,onEdit,onPin }: RawItemProps) {
 
   return (
-    <div className="bg-white rounded-xl shadow-lg transition-all transform hover:scale-102 hover:shadow-xl">
+    <div className="bg-white rounded-xl shadow-lg transition-all transform hover:scale-102 hover:shadow-xl select-none">
         <div className="p-6">
           <div className="flex justify-between gap-4">
           <pre className="whitespace-pre-wrap text-gray-700 font-sans">{raw.content}</pre>
@@ -31,15 +31,21 @@ export default function RawItem({ raw, isAdmin,onDelete,onEdit,onPin }: RawItemP
             <div className="flex gap-2 sm:gap-4 flex-wrap">
             {
               raw.tags.map((tagLabel: string,index:number) => (
-                // <Chip label={tagLabel} key={tagLabel + index} onClick={()=>{} }
-                // sx={{color:"#1447e6",bgcolor:"#dbeafe"}}
-                // />
-                <span
-                  key={tagLabel + index}
-                  className="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full border border-blue-300 shadow-sm"
-                >
-                  {tagLabel}
-                </span>
+                <Chip label={tagLabel} key={tagLabel + index} onClick={()=>{} }
+                  sx={{
+                    color: "#1447e6", bgcolor: "#dbeafe",
+                    "&:hover": {
+                      bgcolor:"#dbeafeaa"
+                  }
+
+                }}
+                />
+                // <span
+                //   key={tagLabel + index}
+                //   className="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-700 rounded-full border border-blue-300 shadow-sm"
+                // >
+                //   {tagLabel}
+                // </span>
               ))
               }
               </div>

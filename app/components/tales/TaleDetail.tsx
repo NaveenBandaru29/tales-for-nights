@@ -58,7 +58,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
   };
 
   return (
-    <div className=" max-w-4xl sm:mx-auto bg-white rounded-lg shadow-md overflow-hidden mx-2">
+    <div className=" max-w-4xl sm:mx-auto bg-white rounded-lg shadow-md overflow-hidden mx-2 select-none">
       <button
         className={`${
           prevTale?._id
