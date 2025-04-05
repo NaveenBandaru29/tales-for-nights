@@ -15,12 +15,12 @@ import Pagination from "../ui/Pagination";
 import RawEditForm from "./RawEditForm";
 import RawDelete from "./RawDelete";
 import RawPin from "./RawPin"
-import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
-import { Raw } from "@/app/types/Raw";
+import {AddCircleRounded,RemoveCircleRounded} from "@mui/icons-material"
+import { PaginationParams, Raw } from "@/app/types/Raw";
 import { Loader } from "../ui/Loader";
 
 export default function RawList() {
-  const [searchParams, setSearchParams] = useState<any>({
+  const [searchParams, setSearchParams] = useState<PaginationParams>({
     query: "",
     page: 1,
     limit: 10,
@@ -126,13 +126,13 @@ export default function RawList() {
         <SearchBar placeholder="Search by Content/Tags..." onSearch={handleSearch} />
         {isAdmin && (
           <button
-            className="text-5xl  active:scale-95 duration-300"
+            className="active:scale-95 duration-300"
             onClick={() => setAddRaw((prev: boolean) => !prev)}
           >
             {addRaw ? (
-              <IoIosRemoveCircle className="fill-red-500" />
+              <RemoveCircleRounded className="text-red-500" fontSize="large" />
             ) : (
-              <IoIosAddCircle className="fill-blue-500" />
+              <AddCircleRounded className="text-blue-500" fontSize="large" />
             )}
           </button>
         )}
@@ -200,7 +200,7 @@ export default function RawList() {
           {totalPages > 1 && (
             <div className="mt-8">
               <Pagination
-                currentPage={searchParams.page}
+                currentPage={searchParams.page || 1}
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
               />

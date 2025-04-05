@@ -2,7 +2,7 @@
 // app/tales/[id]/page.tsx
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 // import TaleDetail from '@/app/components/tales/TaleDetail';

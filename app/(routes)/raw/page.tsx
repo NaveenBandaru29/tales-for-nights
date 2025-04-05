@@ -20,7 +20,7 @@ export default function RawPage() {
   // }, [isAuthenticated, router]);
   
   return (
-    <div className="container max-w- mx-auto px-4 py-4">
+    <div className="container max-w-7xl mx-auto px-4 py-4">
       {/* max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 */}
       <NavTags />
       <RawList />

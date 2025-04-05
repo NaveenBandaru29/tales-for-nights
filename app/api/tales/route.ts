@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Tale from '../../models/Tale';
 import connectToDatabase from '../../lib/mongodb';
-import { isAdmin, isAuthenticated } from '../../lib/jwt';
+import { isAdmin } from '../../lib/jwt';
 
 export async function GET() {
   try {

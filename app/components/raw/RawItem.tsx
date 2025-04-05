@@ -2,11 +2,12 @@
 "use client";
 
 import { Raw } from "@/app/types/Raw";
-import { TiPin } from "react-icons/ti";
-// import Chip from '@mui/material/Chip';
-import { FaHashtag } from "react-icons/fa6";
+import PinIcon from "@/public/Icons/PinIcon";
+import HashTagIcon from "@/public/Icons/HashTagIcon";
 import { Button, Chip } from "@mui/material";
 import { formatDate } from "@/app/utils/helpers";
+import { RichTextReadOnly } from "mui-tiptap";
+import useExtensions from "../common/CustomEditor/useExtensions";
 
 interface RawItemProps {
   raw: Raw;
@@ -16,18 +17,20 @@ interface RawItemProps {
   onPin?:()=>void,
 }
 
-export default function RawItem({ raw, isAdmin,onDelete,onEdit,onPin }: RawItemProps) {
+export default function RawItem({ raw, isAdmin, onDelete, onEdit, onPin }: RawItemProps) {
+  const extensions = useExtensions()
 
   return (
-    <div className="bg-white rounded-xl shadow-lg transition-all transform hover:scale-102 hover:shadow-xl select-none">
+    <div className={`bg-white rounded-xl shadow-lg transition-all transform hover:scale-102 hover:shadow-xl ${!isAdmin && "select-none" }`}>
         <div className="p-6">
-          <div className="flex justify-between gap-4">
-          <pre className="whitespace-pre-wrap text-gray-700 font-sans">{raw.content}</pre>
-          {raw.pinned && <span className="text-2xl"><TiPin className="fill-blue-500 " /></span>}
+          <div className="flex justify-between gap-4 text-gray-700">
+          {/* <pre className="whitespace-pre-wrap text-gray-700 font-sans">{raw.content}</pre> */}
+          <RichTextReadOnly immediatelyRender={false} extensions={extensions} content={raw.content} />
+          {raw.pinned && <span className="text-2xl"><PinIcon className="fill-blue-500 " /></span>}
           </div>
         <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-sm text-gray-600">
           <div className="flex items-center gap-2 sm:gap-4">
-            {raw.tags.length > 0 && <span className="text-blue-500 text-xl"><FaHashtag /> </span>}
+            {raw.tags.length > 0 && <span className="text-blue-500 text-xl"><HashTagIcon /> </span>}
             <div className="flex gap-2 sm:gap-4 flex-wrap">
             {
               raw.tags.map((tagLabel: string,index:number) => (
