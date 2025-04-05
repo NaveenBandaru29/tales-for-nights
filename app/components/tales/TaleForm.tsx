@@ -33,7 +33,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
   const { data, isLoading: isFetching } = useGetTaleByIdQuery(id || '', {
     skip: !id || !isEdit
   });
-  const [prevTale, tale, nextTale] =
+  const [, tale, ] =
     data && data?.length > 0 ? data : [null, null, null];
   const isLoading = isCreating || isUpdating || isFetching;
   const error = createError || updateError;

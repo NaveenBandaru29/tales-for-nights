@@ -5,7 +5,7 @@ import { useGetTaleByIdQuery } from "../../store/apis/talesApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Link from "next/link";
-import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { Loader } from "../ui/Loader";
 import { formatDate } from "@/app/utils/helpers";
@@ -58,28 +58,28 @@ export default function TaleDetail({ id }: TaleDetailProps) {
   };
 
   return (
-    <div className=" max-w-4xl sm:mx-auto bg-white rounded-lg shadow-md overflow-hidden mx-2 select-none">
+    <div className={`max-w-4xl sm:mx-auto bg-white rounded-lg shadow-md overflow-hidden mx-2 ${!isAdmin && "select-none"}`}>
       <button
         className={`${
           prevTale?._id
             ? "bg-blue-200/50 text-blue-500/50 active:bg-blue-400 duration-300"
             : "bg-gray-200/50 text-gray-500/50 "
-        } text-4xl rounded-full p-1 fixed top-[50%] left-[2px] sm:left-[1%] md:left-[2%] lg:left-[3%] cursor-pointer`}
+        } rounded-full p-1 fixed top-[50%] left-[2px] sm:left-[1%] md:left-[2%] lg:left-[3%] cursor-pointer`}
         disabled={!prevTale?._id}
         onClick={() => navigateToTaleById(prevTale?._id)}
       >
-        <BiChevronLeft />
+        <ChevronLeft fontSize="large" />
       </button>
       <button
         className={`${
           nextTale?._id
             ? "bg-blue-200/50 text-blue-500/50 active:bg-blue-400 duration-300"
             : "bg-gray-200/50 text-gray-500/50 "
-        } text-4xl rounded-full p-1 fixed top-[50%] right-[2px] sm:right-[1%] md:right-[2%] lg:right-[3%] cursor-pointer`}
+        } rounded-full p-1 fixed top-[50%] right-[2px] sm:right-[1%] md:right-[2%] lg:right-[3%] cursor-pointer`}
         disabled={!nextTale?._id}
         onClick={() => navigateToTaleById(nextTale?._id)}
       >
-        <BiChevronRight />
+        <ChevronRight fontSize="large" />
       </button>
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-4 text-gray-900">{tale.title}</h1>

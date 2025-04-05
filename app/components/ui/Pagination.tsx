@@ -1,6 +1,9 @@
 // components/ui/Pagination.tsx
 'use client';
-import { GrFormNextLink,GrFormPreviousLink } from "react-icons/gr";
+
+import NextIcon from "@/public/Icons/NextIcon";
+import PreviousIcon from "@/public/Icons/PreviousIcon";
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -71,7 +74,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
           disabled={currentPage === 1}
           className="p-2 sm:p-3 rounded-full cursor-pointer bg-gray-200 text-gray-600 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition duration-200 ease-in-out"
         >
-          <span className="text-lg font-semibold"><GrFormPreviousLink /></span>
+          <span className="text-lg font-semibold"><PreviousIcon /></span>
         </button>
 
         {getPageNumbers().map((pageNum, index) =>
@@ -101,7 +104,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
           disabled={currentPage === totalPages}
           className="p-2 sm:p-3 rounded-full cursor-pointer bg-gray-200 text-gray-600 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition duration-200 ease-in-out"
         >
-          <span className="text-lg font-semibold"><GrFormNextLink /></span>
+          <span className="text-lg font-semibold"><NextIcon /></span>
         </button>
       </nav>
     </div>

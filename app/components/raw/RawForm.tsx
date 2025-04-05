@@ -1,10 +1,12 @@
 // components/raw/RawForm.tsx
 'use client';
-
+import dynamic from 'next/dynamic';
 import { useCreateRawMutation } from '@/app/store/apis/rawApi';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import {MultiValue} from "react-select"
 import SelectField from '../ui/SelectField';
+import { Loader } from '../ui/Loader';
+const CustomEditor = dynamic(()=>import('../common/CustomEditor'),{ssr:false})
 
 export interface Tag {
   value: string;
@@ -54,16 +56,26 @@ export default function RawForm({handleFormClose}:{handleFormClose:()=>void}) {
   };
 
   return (
+    
     <form onSubmit={handleSubmit} className="space-y-6 max-w-full mx-auto bg-white p-8 rounded-xl shadow-lg transition-all hover:shadow-2xl mb-4">
       <div className="relative flex flex-col gap-4">
-        <textarea
+        {/* <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Enter RAW content..."
           className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all ease-in-out duration-300"
           rows={3}
           required
-        />
+          /> */}
+        <Suspense fallback={<Loader />}>
+          <CustomEditor
+            placeholder="Enter RAW content..."
+            showPreview
+            content={content}
+            setContent={setContent}
+            
+          />
+        </Suspense>
         <SelectField
           isMulti
           isClearable

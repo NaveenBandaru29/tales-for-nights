@@ -1,7 +1,7 @@
 'use client';
 
+import SearchIcon from '@/public/Icons/SearchIcon';
 import { useState, useEffect } from 'react';
-import { FiSearch } from "react-icons/fi";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -30,6 +30,7 @@ export default function SearchBar({ onSearch, placeholder }: SearchBarProps) {
     else{
       onSearch("")
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);
 
   return (
@@ -42,7 +43,7 @@ export default function SearchBar({ onSearch, placeholder }: SearchBarProps) {
         className="w-full py-3 pl-10 pr-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out shadow-md hover:shadow-lg outline-none"
       />
       <div className="absolute left-0 top-0 flex items-center justify-center h-full w-10 text-gray-500">
-        <FiSearch className="text-xl" />
+        <SearchIcon className="text-xl" />
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Tag, tags } from "./RawForm";
-import CreatableSelect from "react-select/creatable";
+import dynamic from "next/dynamic";
 import { Raw } from "@/app/types/Raw";
 import { MultiValue } from "react-select";
 import { Button } from "@mui/material";
 import SelectField from "../ui/SelectField";
+const CustomEditor = dynamic(()=>import('../common/CustomEditor'),{ssr:false})
 
 interface RawEditFormProps {
   raw: Raw;
@@ -34,14 +35,21 @@ const RawEditForm = ({ handleSave, isUpdating, raw, handleCancel }: RawEditFormP
 
   return (
     <div className="relative p-6 inset-0 bg-white bg-opacity-90 flex flex-col items-start justify-center gap-4 z-10 rounded-lg shadow-md">
-      <textarea
+      {/* <textarea
         value={rawContent}
         onChange={(e) => setRawContent(e.target.value)}
         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition duration-200"
         rows={4}
         disabled={isUpdating}
         placeholder="Enter RAW content..."
-      />
+      /> */}
+        <CustomEditor
+          placeholder="Enter RAW content..."
+          showPreview
+          content={rawContent}
+          setContent={setRawContent}
+          
+        />
 
       <SelectField
         isMulti

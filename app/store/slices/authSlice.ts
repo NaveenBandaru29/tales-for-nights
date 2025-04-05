@@ -1,5 +1,5 @@
 // store/slices/authSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice/* , PayloadAction */ } from '@reduxjs/toolkit';
 import { authApi } from '../apis/authApi';
 
 interface User {
@@ -30,8 +30,9 @@ const loadAuthState = (): AuthState => {
           isAuthenticated: true,
           error: null,
         };
-      } catch (e) {
+      } catch (error) {
         // Handle parse error
+        console.log("error:",error)
         localStorage.removeItem('token');
         localStorage.removeItem('user');
       }

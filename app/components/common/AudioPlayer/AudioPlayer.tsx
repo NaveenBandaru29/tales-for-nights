@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
-import { FaCirclePause, FaCirclePlay } from 'react-icons/fa6';
+import {PlayCircleRounded,PauseCircleRounded} from "@mui/icons-material"
 const AudioPlayer: React.FC = () => {
   // State to track if the audio is playing or paused
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -16,7 +16,7 @@ const AudioPlayer: React.FC = () => {
           setIsPlaying(true); // Update the state to reflect that the audio is playing
         }
       } catch (error) {
-        console.log('Error playing audio. Please check the file format or your browser settings.');
+        console.log('Error playing audio. Please check the file format or your browser settings.',error);
       }
     };
 
@@ -43,9 +43,9 @@ const AudioPlayer: React.FC = () => {
       <span>Music</span>
       <button 
         onClick={togglePlayPause} 
-        className="rounded font-bold text-4xl text-white active:scale-90 duration-300"
+        className="cursor-pointer active:scale-90 duration-300"
       >
-        {isPlaying ? <FaCirclePause className='fill-red-400' /> : <FaCirclePlay className='fill-green-500' />}
+        {isPlaying ? <PauseCircleRounded fontSize='large' className='text-red-400' /> : <PlayCircleRounded fontSize='large' className='text-green-500' />}
       </button>
     </div>
   );
