@@ -6,8 +6,7 @@ import PinIcon from "@/public/Icons/PinIcon";
 import HashTagIcon from "@/public/Icons/HashTagIcon";
 import { Button, Chip } from "@mui/material";
 import { formatDate } from "@/app/utils/helpers";
-import { RichTextReadOnly } from "mui-tiptap";
-import useExtensions from "../common/CustomEditor/useExtensions";
+import EditorTextReadOnly from "../common/CustomEditor/EditorTextReadOnly";
 
 interface RawItemProps {
   raw: Raw;
@@ -18,14 +17,13 @@ interface RawItemProps {
 }
 
 export default function RawItem({ raw, isAdmin, onDelete, onEdit, onPin }: RawItemProps) {
-  const extensions = useExtensions()
 
   return (
     <div className={`bg-white rounded-xl shadow-lg transition-all transform hover:scale-102 hover:shadow-xl ${!isAdmin && "select-none" }`}>
         <div className="p-6">
           <div className="flex justify-between gap-4 text-gray-700">
           {/* <pre className="whitespace-pre-wrap text-gray-700 font-sans">{raw.content}</pre> */}
-          <RichTextReadOnly immediatelyRender={false} extensions={extensions} content={raw.content} />
+          <EditorTextReadOnly content={raw.content} />
           {raw.pinned && <span className="text-2xl"><PinIcon className="fill-blue-500 " /></span>}
           </div>
         <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-sm text-gray-600">

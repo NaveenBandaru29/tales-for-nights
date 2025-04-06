@@ -24,7 +24,7 @@ const CustomEditor = ({ placeholder, showPreview = false, content = "", setConte
     const extensions = useExtensions({ placeholder })
 
     return (
-        <div className="">
+        <div className="prose max-w-none prose-blockquote:border-none">
             <RichTextEditor
                 content={content}
                 ref={rteRef}

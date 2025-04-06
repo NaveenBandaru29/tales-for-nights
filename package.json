@@ -14,6 +14,7 @@
     "@mui/icons-material": "^6.4.8",
     "@mui/material": "^6.4.8",
     "@reduxjs/toolkit": "^2.6.0",
+    "@tailwindcss/typography": "^0.5.16",
     "@tiptap/core": "^2.11.5",
     "@tiptap/extension-blockquote": "^2.11.7",
     "@tiptap/extension-bold": "^2.11.7",

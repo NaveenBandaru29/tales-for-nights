@@ -95,7 +95,8 @@ export default function useExtensions({
             Gapcursor,
             HeadingWithAnchor,
             TextAlign.configure({
-                types: ["heading", "paragraph", "image"],
+                types: ["heading", "paragraph"],
+                defaultAlignment:"left"
             }),
             TextStyle,
             Color,
