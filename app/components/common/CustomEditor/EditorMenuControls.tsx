@@ -13,7 +13,7 @@ import {
     MenuButtonItalic,
     MenuButtonOrderedList,
     MenuButtonRedo,
-    MenuButtonRemoveFormatting,
+    // MenuButtonRemoveFormatting,
     MenuButtonStrikethrough,
     MenuButtonSubscript,
     MenuButtonSuperscript,
@@ -27,7 +27,7 @@ import {
     MenuSelectFontFamily,
     MenuSelectFontSize,
     MenuSelectHeading,
-    // MenuSelectTextAlign,
+    MenuSelectTextAlign,
     isTouchDevice,
 } from "mui-tiptap";
 
@@ -99,15 +99,15 @@ export default function EditorMenuControls() {
 
             <MenuButtonEditLink />
 
-            {/* <MenuDivider />
+            <MenuDivider />
 
-            <MenuSelectTextAlign /> */}
+            <MenuSelectTextAlign />
 
             <MenuDivider />
 
-            <MenuButtonOrderedList />
-
             <MenuButtonBulletedList />
+
+            <MenuButtonOrderedList />
 
             <MenuButtonTaskList />
 
@@ -136,7 +136,7 @@ export default function EditorMenuControls() {
 
             <MenuDivider />
 
-            <MenuButtonRemoveFormatting />
+            {/* <MenuButtonRemoveFormatting /> */}
 
             <MenuDivider />
 

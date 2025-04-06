@@ -120,14 +120,20 @@ export default function RawList() {
     setEdit(null)
   }
 
+  const handleAddClick = () => {
+    setAddRaw((prev: boolean) => !prev)
+    setDeleteConfirm(null)
+    setEdit(null)
+  }
+
   return (
     <div className="container mx-auto">
       <div className="mb-6 flex gap-2 sm:gap-4">
         <SearchBar placeholder="Search by Content/Tags..." onSearch={handleSearch} />
         {isAdmin && (
           <button
-            className="active:scale-95 duration-300"
-            onClick={() => setAddRaw((prev: boolean) => !prev)}
+            className="cursor-pointer active:scale-95 duration-300"
+            onClick={handleAddClick}
           >
             {addRaw ? (
               <RemoveCircleRounded className="text-red-500" fontSize="large" />
