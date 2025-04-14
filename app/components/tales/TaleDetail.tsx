@@ -95,12 +95,12 @@ export default function TaleDetail({ id }: TaleDetailProps) {
           <p className="text-gray-700">{tale.description}</p>
         </div>
 
-        <div className="prose max-w-none">
+        <>
           <h2 className="text-xl font-semibold mb-2 text-gray-800">Tale</h2>
           <pre className="whitespace-pre-line text-gray-700 font-sans mt-0 pt-0">
             {tale.content}
           </pre>
-        </div>
+        </>
       </div>
 
       <div className="px-8 py-4 bg-gray-50 flex justify-between">

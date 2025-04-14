@@ -5,7 +5,8 @@ import { Raw } from "@/app/types/Raw";
 import { MultiValue } from "react-select";
 import { Button } from "@mui/material";
 import SelectField from "../ui/SelectField";
-const CustomEditor = dynamic(()=>import('../common/CustomEditor'),{ssr:false})
+import { Loader } from "../ui/Loader";
+const CustomEditor = dynamic(()=>import('../common/CustomEditor'),{ssr:false,loading:()=><Loader loadingText='Loading Editor...' />})
 
 interface RawEditFormProps {
   raw: Raw;
@@ -34,7 +35,7 @@ const RawEditForm = ({ handleSave, isUpdating, raw, handleCancel }: RawEditFormP
   };
 
   return (
-    <div className="relative p-6 inset-0 bg-white bg-opacity-90 flex flex-col items-start justify-center gap-4 z-10 rounded-lg shadow-md">
+    <div className="relative p-6 inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center gap-4 z-10 rounded-lg shadow-md">
       {/* <textarea
         value={rawContent}
         onChange={(e) => setRawContent(e.target.value)}
