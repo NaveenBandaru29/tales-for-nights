@@ -6,7 +6,7 @@ import { Suspense, useState } from 'react';
 import {MultiValue} from "react-select"
 import SelectField from '../ui/SelectField';
 import { Loader } from '../ui/Loader';
-const CustomEditor = dynamic(()=>import('../common/CustomEditor'),{ssr:false})
+const CustomEditor = dynamic(()=>import('../common/CustomEditor'),{ssr:false,loading:()=><Loader loadingText='Loading Editor...'/>})
 
 export interface Tag {
   value: string;
@@ -67,7 +67,6 @@ export default function RawForm({handleFormClose}:{handleFormClose:()=>void}) {
           rows={3}
           required
           /> */}
-        <Suspense fallback={<Loader />}>
           <CustomEditor
             placeholder="Enter RAW content..."
             showPreview
@@ -75,7 +74,6 @@ export default function RawForm({handleFormClose}:{handleFormClose:()=>void}) {
             setContent={setContent}
             
           />
-        </Suspense>
         <SelectField
           isMulti
           isClearable
