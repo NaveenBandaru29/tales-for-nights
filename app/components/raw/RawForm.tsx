@@ -2,7 +2,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { useCreateRawMutation } from '@/app/store/apis/rawApi';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import {MultiValue} from "react-select"
 import SelectField from '../ui/SelectField';
 import { Loader } from '../ui/Loader';
