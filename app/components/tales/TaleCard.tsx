@@ -5,6 +5,8 @@ import { Tale } from '../../types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { formatDate } from '@/app/utils/helpers';
+import HashTagIcon from '@/public/Icons/HashTagIcon';
+import { Chip } from '@mui/material';
 
 interface TaleCardProps {
   tale: Tale;
@@ -15,7 +17,7 @@ interface TaleCardProps {
 export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.isAdmin;
-  
+
   // Format the date
   // const formattedDate = new Date(tale.createdAt).toLocaleDateString('en-US', {
   //   year: 'numeric',
@@ -25,14 +27,14 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
   //   minute: '2-digit',
   //   hour12: true,
   // });
-  
+
   // Truncate description if it's too long
   const truncatedDescription = tale.description.length > 150
     ? `${tale.description.substring(0, 150)}...`
     : tale.description;
 
   return (
-    <div className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full ${!isAdmin && "select-none" }`}>
+    <div className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full ${!isAdmin && "select-none"}`}>
       <Link href={`/tales/${tale._id}`} className="block flex-grow">
         <div className="p-4 sm:p-6">
           <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-800 line-clamp-2">{tale.title}</h3>
@@ -40,9 +42,27 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
           <div className="text-xs sm:text-sm text-gray-500 flex justify-end">
             <span>{formatDate(tale?.createdAt)}</span>
           </div>
+          <div className="flex items-center gap-2 sm:gap-4">
+            {tale.tags.length > 0 && <span className="text-blue-500 text-xl"><HashTagIcon /> </span>}
+            <div className="flex gap-2 sm:gap-2 flex-wrap mt-2">
+              {
+                tale.tags.map((tagLabel: string, index: number) => (
+                  <Chip label={tagLabel} key={tagLabel + index} onClick={() => { }} size="small"
+                    sx={{
+                      color: "#1447e6", bgcolor: "#dbeafe",
+                      "&:hover": {
+                        bgcolor: "#dbeafeaa"
+                      }
+
+                    }}
+                  />
+                ))
+              }
+            </div>
+          </div>
         </div>
       </Link>
-      
+
       {isAdmin && (
         <div className="px-6 py-3 bg-gray-50 flex justify-end space-x-2">
           {onEdit && (
@@ -57,7 +77,7 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
               Edit
             </button>
           )}
-          
+
           {onDelete && (
             <button
               onClick={(e) => {

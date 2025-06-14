@@ -9,6 +9,9 @@ import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { Loader } from "../ui/Loader";
 import { formatDate } from "@/app/utils/helpers";
+import EditorTextReadOnly from "../common/CustomEditor/EditorTextReadOnly";
+import { Chip } from "@mui/material";
+import HashTagIcon from "@/public/Icons/HashTagIcon";
 
 interface TaleDetailProps {
   id: string;
@@ -22,7 +25,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
   const [prevTale, tale, nextTale] =
     data && data?.length > 0 ? data : [null, null, null];
 
-  if (isLoading) {
+  if (isLoading || !(data?.length)) {
     return (
       <Loader loadingText="Loading Tale..." />
     );
@@ -58,48 +61,65 @@ export default function TaleDetail({ id }: TaleDetailProps) {
   };
 
   return (
-    <div className={`max-w-4xl sm:mx-auto bg-white rounded-lg shadow-md overflow-hidden mx-2 ${!isAdmin && "select-none"}`}>
+    <div className={`max-w-5xl sm:mx-auto bg-white rounded-lg shadow-md overflow-hidden mx-2 ${!isAdmin && "select-none"}`}>
       <button
-        className={`${
-          prevTale?._id
-            ? "bg-blue-200/50 text-blue-500/50 active:bg-blue-400 duration-300"
-            : "bg-gray-200/50 text-gray-500/50 "
-        } rounded-full p-1 fixed top-[50%] left-[2px] sm:left-[1%] md:left-[2%] lg:left-[3%] cursor-pointer`}
+        className={`${prevTale?._id
+          ? "bg-blue-200/50 text-blue-500/50 active:bg-blue-400 duration-300"
+          : "bg-gray-200/50 text-gray-500/50 "
+          } rounded-full p-1 fixed top-[50%] left-[2px] sm:left-[1%] md:left-[2%] lg:left-[3%] cursor-pointer`}
         disabled={!prevTale?._id}
         onClick={() => navigateToTaleById(prevTale?._id)}
       >
         <ChevronLeft fontSize="large" />
       </button>
       <button
-        className={`${
-          nextTale?._id
-            ? "bg-blue-200/50 text-blue-500/50 active:bg-blue-400 duration-300"
-            : "bg-gray-200/50 text-gray-500/50 "
-        } rounded-full p-1 fixed top-[50%] right-[2px] sm:right-[1%] md:right-[2%] lg:right-[3%] cursor-pointer`}
+        className={`${nextTale?._id
+          ? "bg-blue-200/50 text-blue-500/50 active:bg-blue-400 duration-300"
+          : "bg-gray-200/50 text-gray-500/50 "
+          } rounded-full p-1 fixed top-[50%] right-[2px] sm:right-[1%] md:right-[2%] lg:right-[3%] cursor-pointer`}
         disabled={!nextTale?._id}
         onClick={() => navigateToTaleById(nextTale?._id)}
       >
         <ChevronRight fontSize="large" />
       </button>
-      <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4 text-gray-900">{tale.title}</h1>
+      <div className="p-6 sm:p-8 flex flex-col gap-4">
+        <h1 className="text-3xl font-bold text-gray-900">{tale.title}</h1>
 
-        <div className="text-sm text-gray-500 mb-6">
+        <div className="text-sm text-gray-500 mb-2">
           Created on: {formatDate(tale.createdAt)}
         </div>
 
-        <div className="bg-gray-200 p-4 rounded-md mb-4">
+        <div className="bg-gray-200 p-4 rounded-md">
           <h2 className="text-xl font-semibold mb-2 text-gray-800">
             Description
           </h2>
           <p className="text-gray-700">{tale.description}</p>
         </div>
+        <div className="flex items-center gap-2 sm:gap-4 ">
+          {tale.tags.length > 0 && <span className="text-blue-500 text-xl"><HashTagIcon /> </span>}
+          <div className="flex gap-2 sm:gap-4 flex-wrap">
+            {
+              tale.tags.map((tagLabel: string, index: number) => (
+                <Chip label={tagLabel} key={tagLabel + index} onClick={() => { }} size="small"
+                  sx={{
+                    color: "#1447e6", bgcolor: "#dbeafe",
+                    "&:hover": {
+                      bgcolor: "#dbeafeaa"
+                    }
+
+                  }}
+                />
+              ))
+            }
+          </div>
+        </div>
 
         <>
-          <h2 className="text-xl font-semibold mb-2 text-gray-800">Tale</h2>
-          <pre className="whitespace-pre-line text-gray-700 font-sans mt-0 pt-0">
+          <h2 className="text-xl font-semibold text-gray-800">Tale</h2>
+          {/* <pre className="whitespace-pre-line text-gray-700 font-sans mt-0 pt-0">
             {tale.content}
-          </pre>
+          </pre> */}
+          <EditorTextReadOnly content={tale.content} />
         </>
       </div>
 
