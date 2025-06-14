@@ -9,7 +9,7 @@ export async function GET() {
     await connectToDatabase();
     console.log("Connected to db....")
     const tales = await Tale.find().sort({ createdAt: -1 });
-    
+
     return NextResponse.json({
       success: true,
       data: tales,
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 
     await connectToDatabase();
     const body = await request.json();
-    const { title, description, content } = body;
+    const { title, description, content, tags } = body;
 
     if (!title || !description || !content) {
       return NextResponse.json(
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
       title,
       description,
       content,
+      tags
     });
 
     await tale.save();

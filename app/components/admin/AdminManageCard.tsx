@@ -1,6 +1,7 @@
 import { formatDate } from "@/app/utils/helpers";
 import Link from "next/link";
 import React from "react";
+import EditorTextReadOnly from "../common/CustomEditor/EditorTextReadOnly";
 
 interface AdminManageCardProps {
   item: any;
@@ -19,9 +20,10 @@ const AdminManageCard = ({ item, openDeleteModal }: AdminManageCardProps) => {
               </h3>
             </div>
           )}
-          <p className="mt-1 text-sm text-gray-500 truncate">
-            {item?.description ? item?.description : item?.content}
-          </p>
+          {item?.description ?
+            <p className={`mt-1 text-smtext-gray-500 truncate`}>{item?.description}</p>
+            : <EditorTextReadOnly content={item?.content} />}
+
           {item?.createdAt && (
             <p className="mt-1 text-xs text-gray-400">
               Created on: {formatDate(item?.createdAt)}

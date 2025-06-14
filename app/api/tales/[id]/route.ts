@@ -15,14 +15,14 @@ import mongoose from 'mongoose';
 export async function GET(request: NextRequest, { params }: any) {
   try {
     const { id } = await params;
-    
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid tale ID' },
         { status: 400 }
       );
     }
-    
+
     await connectToDatabase();
     const tale = await Tale.findById(id);
 
@@ -36,12 +36,12 @@ export async function GET(request: NextRequest, { params }: any) {
     const currentCreatedAt = tale.createdAt;
 
     const prevTale = await Tale.findOne({ createdAt: { $lt: currentCreatedAt } })
-    .sort({ createdAt: -1 }); 
-  
+      .sort({ createdAt: -1 });
+
     const nextTale = await Tale.findOne({ createdAt: { $gt: currentCreatedAt } })
       .sort({ createdAt: 1 });
 
-    const data = [nextTale,tale,prevTale]
+    const data = [nextTale, tale, prevTale]
     return NextResponse.json({
       success: true,
       data,
@@ -66,17 +66,17 @@ export async function PUT(request: NextRequest, { params }: any) {
     }
 
     const { id } = await params;
-    
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid tale ID' },
         { status: 400 }
       );
     }
-    
+
     await connectToDatabase();
     const body = await request.json();
-    const { title, description, content } = body;
+    const { title, description, content, tags } = body;
 
     if (!title && !description && !content) {
       return NextResponse.json(
@@ -89,6 +89,7 @@ export async function PUT(request: NextRequest, { params }: any) {
     if (title) updateData.title = title;
     if (description) updateData.description = description;
     if (content) updateData.content = content;
+    updateData.tags = tags
 
     const tale = await Tale.findByIdAndUpdate(
       id,
@@ -127,14 +128,14 @@ export async function DELETE(request: NextRequest, { params }: any) {
     }
 
     const { id } = await params;
-    
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { success: false, error: 'Invalid tale ID' },
         { status: 400 }
       );
     }
-    
+
     await connectToDatabase();
     const tale = await Tale.findByIdAndDelete(id);
 

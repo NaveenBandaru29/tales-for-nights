@@ -3,10 +3,14 @@ export interface Tale {
   title: string;
   description: string;
   content: string;
+  tags: string[];
   createdAt: string;
   updatedAt: string;
 }
-
+export interface Tag {
+  value: string;
+  label: string;
+}
 export interface User {
   id: string;
   username: string;
@@ -26,6 +30,7 @@ export interface TaleFormData {
   title: string;
   description: string;
   content: string;
+  tags: string[]
 }
 
 export interface LoginFormData {
