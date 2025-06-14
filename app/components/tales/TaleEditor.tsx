@@ -57,7 +57,7 @@ const TaleEditor = ({ content, setContent }: TaleEditorProps) => {
             </Tabs>
 
             <TabPanel value={tabIndex} index={0}>
-                <CustomEditor content={content} setContent={setContent} />
+                <CustomEditor content={content} setContent={setContent} placeholder='Tale goes here.....' />
             </TabPanel>
 
             <TabPanel value={tabIndex} index={1}>

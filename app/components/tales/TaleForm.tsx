@@ -243,7 +243,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
             /> */}
 
             {/* <CustomEditor content={formData.content} setContent={setContent} /> */}
-            {formData.content && <TaleEditor content={formData.content} setContent={setContent} />}
+            {isEdit ? formData && formData.content && <TaleEditor content={formData.content} setContent={setContent} /> : <TaleEditor content={formData.content} setContent={setContent} />}
             {formErrors.content && (
               <p className="mt-1 text-red-600 text-sm">{formErrors.content}</p>
             )}
