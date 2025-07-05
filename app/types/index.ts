@@ -37,3 +37,20 @@ export interface LoginFormData {
   username: string;
   password: string;
 }
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+  query?: string;
+}
+
+export interface PaginatedResponse {
+  data: Tale[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    pages: number;
+  };
+  success: boolean;
+}

@@ -4,29 +4,29 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
-export interface NavChipProps{
-    path:string,
-    name:string
+export interface NavChipProps {
+    path: string,
+    name: string
 }
 
-const NavChip = ({path,name}:NavChipProps) => {
+const NavChip = ({ path, name }: NavChipProps) => {
     const pathname = usePathname()
     const isActive = (pathname === path)
-    
-  return (
-        <Link href={path} className={`relative text-white text-[16px] sm:text-md px-3 sm:px-4 py-1 rounded-full hover:bg-blue-400 duration-300 ${isActive? "bg-blue-500" :"bg-gray-400"} `}>
+
+    return (
+        <Link href={path} className={`relative text-white text-[16px] sm:text-md px-3 sm:px-4 py-1 rounded-full hover:bg-blue-400 duration-300 ${isActive ? "bg-blue-500" : "bg-gray-400"} `}>
             {name}
             {
-                path === "/raw" && 
-            <div className='absolute top-[2px] right-[2px]'>
-                <span className="relative flex size-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex size-2 rounded-full bg-red-500"></span>
-                </span>
-            </div>
+                path === "/raw" &&
+                <div className='absolute top-[2px] right-[2px]'>
+                    <span className="relative flex size-2">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex size-2 rounded-full bg-red-500"></span>
+                    </span>
+                </div>
             }
         </Link>
-  )
+    )
 }
 
 export default NavChip

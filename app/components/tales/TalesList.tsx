@@ -8,16 +8,24 @@ import { useGetTalesQuery, useDeleteTaleMutation } from '../../store/apis/talesA
 import TaleCard from './TaleCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { Tale } from '@/app/types';
+import { PaginationParams, Tale } from '@/app/types';
 import { Loader } from '../ui/Loader';
+import Paginator from '../ui/Paginator';
 
 export default function TalesList() {
-  const { data: tales = [], isLoading, error } = useGetTalesQuery();
+  const [searchParams, setSearchParams] = useState<PaginationParams>({
+    query: "",
+    page: 1,
+    limit: 10,
+  });
+  const { data, isLoading, error } = useGetTalesQuery(searchParams);
+  const tales = data?.data || [];
+  const totalPages = data?.pagination?.pages || 1;
   const [deleteTale] = useDeleteTaleMutation();
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.isAdmin;
-  
+
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const handleEdit = (id: string) => {
@@ -37,6 +45,12 @@ export default function TalesList() {
     }
   };
 
+  const handlePageChange = (e: any, page: number) => {
+    setSearchParams((prev: any) => ({
+      ...prev,
+      page,
+    }));
+  };
   if (isLoading) {
     return (
       <Loader loadingText='Loading Tales...' />
@@ -67,36 +81,43 @@ export default function TalesList() {
     );
   }
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {tales.map((tale:Tale) => (
-        <div key={tale._id} className="relative">
-          {deleteConfirm === tale._id && (
-            <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center z-10 rounded-lg shadow-md">
-              <p className="text-center mb-4">Are you sure you want to delete this tale?</p>
-              <div className="flex space-x-4">
-                <button
-                  onClick={() => handleDelete(tale._id)}
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                >
-                  Yes, Delete
-                </button>
-                <button
-                  onClick={() => setDeleteConfirm(null)}
-                  className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-                >
-                  Cancel
-                </button>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tales.map((tale: Tale) => (
+          <div key={tale._id} className="relative">
+            {deleteConfirm === tale._id && (
+              <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center z-10 rounded-lg shadow-md">
+                <p className="text-center mb-4">Are you sure you want to delete this tale?</p>
+                <div className="flex space-x-4">
+                  <button
+                    onClick={() => handleDelete(tale._id)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                  >
+                    Yes, Delete
+                  </button>
+                  <button
+                    onClick={() => setDeleteConfirm(null)}
+                    className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-          
-          <TaleCard
-            tale={tale}
-            onEdit={isAdmin ? () => handleEdit(tale._id) : undefined}
-            onDelete={isAdmin ? () => handleDelete(tale._id) : undefined}
-          />
+            )}
+
+            <TaleCard
+              tale={tale}
+              onEdit={isAdmin ? () => handleEdit(tale._id) : undefined}
+              onDelete={isAdmin ? () => handleDelete(tale._id) : undefined}
+            />
+          </div>
+        ))}
+      </div>
+      {totalPages > 1 && (
+        <div className="mt-8 flex justify-center">
+          <Paginator count={totalPages} onChange={handlePageChange} page={searchParams.page || 1} />
         </div>
-      ))}
-    </div>
+      )}
+    </>
   );
 }

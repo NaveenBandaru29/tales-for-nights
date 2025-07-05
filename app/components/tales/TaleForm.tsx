@@ -72,7 +72,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
         content: tale.content,
         tags: tale.tags
       });
-      console.log(tale?.tags/* .map(tag => ({ value: tag, label: tag })) */)
+      // console.log(tale?.tags/* .map(tag => ({ value: tag, label: tag })) */)
       setSelectedTags(tale?.tags?.map(tag => ({ value: tag, label: tag })) || [])
     }
   }, [tale, isEdit]);
@@ -143,7 +143,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
       return;
     }
     const taleData = { ...formData, tags: selectedTags.map(tag => tag.label) }
-    console.log(taleData)
+    // console.log(taleData)
     try {
       if (isEdit && id) {
         await updateTale({ id, taleData }).unwrap();

@@ -11,13 +11,14 @@ import {
 import SearchBar from "./SearchBar";
 import RawForm from "./RawForm";
 import RawItem from "./RawItem";
-import Pagination from "../ui/Pagination";
+// import Pagination from "../ui/Pagination";
 import RawEditForm from "./RawEditForm";
 import RawDelete from "./RawDelete";
 import RawPin from "./RawPin"
-import {AddCircleRounded,RemoveCircleRounded} from "@mui/icons-material"
+import { AddCircleRounded, RemoveCircleRounded } from "@mui/icons-material"
 import { PaginationParams, Raw } from "@/app/types/Raw";
 import { Loader } from "../ui/Loader";
+import Paginator from "../ui/Paginator";
 
 export default function RawList() {
   const [searchParams, setSearchParams] = useState<PaginationParams>({
@@ -26,12 +27,12 @@ export default function RawList() {
     limit: 10,
   });
 
-  const { user, isAuthenticated } = useSelector(
+  const { user, isAuthenticated }: any = useSelector(
     (state: RootState) => state.auth
   );
   const isAdmin = isAuthenticated && user?.isAdmin;
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
-  const [pinConfirm,setPinConfirm] = useState<string | null>(null)
+  const [pinConfirm, setPinConfirm] = useState<string | null>(null)
   const [edit, setEdit] = useState<string | null>(null);
   const [deleteRaw, { isLoading: isDeleting }] = useDeleteRawMutation();
   const [addRaw, setAddRaw] = useState<boolean>(false);
@@ -50,7 +51,7 @@ export default function RawList() {
   };
 
   // Handle page change for pagination
-  const handlePageChange = (page: number) => {
+  const handlePageChange = (e: any, page: number) => {
     setSearchParams((prev: any) => ({
       ...prev,
       page,
@@ -62,7 +63,7 @@ export default function RawList() {
 
   // Handle saving updates to RAW content
   const handleSave = async (id: string, raw: Raw) => {
-    const {content,pinned,tags} = raw
+    const { content, pinned, tags } = raw
     if (!content.trim()) return;
     const rawData = {
       content,
@@ -93,28 +94,28 @@ export default function RawList() {
     setAddRaw(false)
   };
 
-  const handlePin = async (id:string,pinned:boolean,content:string,tags:string[]) =>{
-    if(pinConfirm === id){
+  const handlePin = async (id: string, pinned: boolean, content: string, tags: string[]) => {
+    if (pinConfirm === id) {
       try {
-        await updateRaw({ id, rawData: { content,pinned,tags } }).unwrap();
+        await updateRaw({ id, rawData: { content, pinned, tags } }).unwrap();
       } catch (err) {
         console.error("Failed to update RAW:", err);
       }
       setPinConfirm(null)
     }
-    else{
+    else {
       setPinConfirm(id)
     }
     setAddRaw(false)
   }
 
-  const handleEditClick =(raw:Raw) =>{
+  const handleEditClick = (raw: Raw) => {
     setAddRaw(false)
     setEdit(raw._id)
     setDeleteConfirm(null)
   }
 
-  const handleDeleteClick = (id:string) => {
+  const handleDeleteClick = (id: string) => {
     setDeleteConfirm(id)
     setAddRaw(false)
     setEdit(null)
@@ -144,76 +145,72 @@ export default function RawList() {
         )}
       </div>
 
-      {isAdmin && addRaw && <RawForm handleFormClose={()=>setAddRaw(false)} />}
+      {isAdmin && addRaw && <RawForm handleFormClose={() => setAddRaw(false)} />}
 
-      {isLoading ? (<Loader loadingText="Loading Raws..." />) 
-      : error ? (
-        <div className="bg-red-100 text-red-700 p-4 rounded-lg">
-          Error loading RAWs. Please try again.
-        </div>
-      ) : raws.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          {searchParams.query
-            ? `No RAWs found matching "${searchParams.query}"`
-            : "No RAWs available"}
-        </div>
-      ) : (
-        <div className="w-full flex gap-4 flex-col">
-          {raws.map((raw) => (
-            <div key={raw._id} className="relative">
-              {deleteConfirm === raw._id && (
-                <RawDelete
-                  handleCancel={() => setDeleteConfirm(null)}
-                  handleDelete={() => handleDelete(raw._id)}
-                  isDeleting={isDeleting}
-                />
-              )}
-              {edit === raw._id && isAdmin && (
-                <RawEditForm
-                  // content={content}
-                  raw={raw}
-                  handleSave={handleSave}
-                  isUpdating={isUpdating}
-                  // setContent={setContent}
-                  handleCancel={() => setEdit(null)}
-                />
-              )}
-              {
-                pinConfirm === raw._id && isAdmin &&(
-                  <RawPin
-                    handleCancel={()=>setPinConfirm(null)}
-                    isPinning={isUpdating}
-                    handlePin={()=>handlePin(raw._id,!raw.pinned,raw.content,raw.tags)}
-                    pinned={raw.pinned}
+      {isLoading ? (<Loader loadingText="Loading Raws..." />)
+        : error ? (
+          <div className="bg-red-100 text-red-700 p-4 rounded-lg">
+            Error loading RAWs. Please try again.
+          </div>
+        ) : raws.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            {searchParams.query
+              ? `No RAWs found matching "${searchParams.query}"`
+              : "No RAWs available"}
+          </div>
+        ) : (
+          <div className="w-full flex gap-4 flex-col">
+            {raws.map((raw: Raw) => (
+              <div key={raw._id} className="relative">
+                {deleteConfirm === raw._id && (
+                  <RawDelete
+                    handleCancel={() => setDeleteConfirm(null)}
+                    handleDelete={() => handleDelete(raw._id)}
+                    isDeleting={isDeleting}
                   />
-                )
-              }
-              {edit !== raw._id &&  (
-                <RawItem
-                  key={raw._id}
-                  raw={raw}
-                  isAdmin={isAdmin ? true : false}
-                  onEdit={
-                    isAdmin
-                      ? () => handleEditClick(raw) : undefined
-                  }
-                  onDelete={isAdmin ? () => handleDeleteClick(raw._id) : undefined}
-                  onPin={isAdmin ? () => setPinConfirm(raw._id) : undefined}
-                />)}
-            </div>
-          ))}
+                )}
+                {edit === raw._id && isAdmin && (
+                  <RawEditForm
+                    // content={content}
+                    raw={raw}
+                    handleSave={handleSave}
+                    isUpdating={isUpdating}
+                    // setContent={setContent}
+                    handleCancel={() => setEdit(null)}
+                  />
+                )}
+                {
+                  pinConfirm === raw._id && isAdmin && (
+                    <RawPin
+                      handleCancel={() => setPinConfirm(null)}
+                      isPinning={isUpdating}
+                      handlePin={() => handlePin(raw._id, !raw.pinned, raw.content, raw.tags)}
+                      pinned={raw.pinned}
+                    />
+                  )
+                }
+                {edit !== raw._id && (
+                  <RawItem
+                    key={raw._id}
+                    raw={raw}
+                    isAdmin={isAdmin ? true : false}
+                    onEdit={
+                      isAdmin
+                        ? () => handleEditClick(raw) : undefined
+                    }
+                    onDelete={isAdmin ? () => handleDeleteClick(raw._id) : undefined}
+                    onPin={isAdmin ? () => setPinConfirm(raw._id) : undefined}
+                  />)}
+              </div>
+            ))}
 
-          {totalPages > 1 && (
-            <div className="mt-8">
-              <Pagination
-                currentPage={searchParams.page || 1}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            </div>
-          )}
-        </div>
-      )}
+            {totalPages > 1 && (
+              <div className="mt-8 flex justify-center">
+                <Paginator count={totalPages} onChange={handlePageChange} page={searchParams.page || 1} />
+              </div>
+            )}
+          </div>
+        )}
     </div>
   );
 }

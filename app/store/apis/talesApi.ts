@@ -1,44 +1,49 @@
 // store/apis/talesApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Tale, TaleFormData, ApiResponse } from '../../types';
+import { Tale, TaleFormData, ApiResponse, PaginationParams, PaginatedResponse } from '../../types';
 import { RootState } from '../../store';
 
 export const talesApi = createApi({
   reducerPath: 'talesApi',
-  baseQuery: fetchBaseQuery({ 
+  baseQuery: fetchBaseQuery({
     baseUrl: '/api',
     prepareHeaders: (headers, { getState }) => {
       // Get the token from the auth state
       const token = (getState() as RootState).auth.token;
-      
+
       // If we have a token, add it to the headers
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
-      
+
       return headers;
     },
   }),
   tagTypes: ['Tales', 'Tale'],
   endpoints: (builder) => ({
-    getTales: builder.query<Tale[], void>({
-      query: () => '/tales',
-      transformResponse: (response: ApiResponse<Tale[]>) => response.data || [],
+    getTales: builder.query<PaginatedResponse, PaginationParams>({
+      query: ({ page = 1, limit = 10, query = '' }) => {
+        let queryString = `/tales?page=${page}&limit=${limit}`;
+        if (query) {
+          queryString += `&search=${encodeURIComponent(query)}`;
+        }
+        return queryString;
+      },
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ _id }) => ({ type: 'Tales' as const, id: _id })),
-              { type: 'Tales', id: 'LIST' },
-            ]
+            ...result.data.map(({ _id }) => ({ type: 'Tales' as const, id: _id })),
+            { type: 'Tales', id: 'LIST' },
+          ]
           : [{ type: 'Tales', id: 'LIST' }],
     }),
-    
+
     getTaleById: builder.query<Tale[], string>({
       query: (id) => `/tales/${id}`,
       transformResponse: (response: ApiResponse<Tale[]>) => response.data as Tale[],
       providesTags: (result, error, id) => [{ type: 'Tale', id }],
     }),
-    
+
     createTale: builder.mutation<Tale, TaleFormData>({
       query: (taleData) => ({
         url: '/tales',
@@ -48,7 +53,7 @@ export const talesApi = createApi({
       transformResponse: (response: ApiResponse<Tale>) => response.data as Tale,
       invalidatesTags: [{ type: 'Tales', id: 'LIST' }],
     }),
-    
+
     updateTale: builder.mutation<Tale, { id: string; taleData: Partial<TaleFormData> }>({
       query: ({ id, taleData }) => ({
         url: `/tales/${id}`,
@@ -61,7 +66,7 @@ export const talesApi = createApi({
         { type: 'Tale', id },
       ],
     }),
-    
+
     deleteTale: builder.mutation<{ id: string }, string>({
       query: (id) => ({
         url: `/tales/${id}`,

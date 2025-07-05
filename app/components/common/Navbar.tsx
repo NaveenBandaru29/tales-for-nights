@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import LogoutButton from "../auth/LoginButton";
 import Image from "next/image";
 import { IconButton } from "@mui/material"
-import {MenuRounded,CloseRounded} from '@mui/icons-material';
+import { MenuRounded, CloseRounded } from '@mui/icons-material';
 
 export default function Navbar() {
   const { isAuthenticated, user } = useSelector(
@@ -45,7 +45,7 @@ export default function Navbar() {
                 alt="tfn_logo"
                 width={25}
                 height={25}
-                style={{ width: "auto", height: "auto" }}
+                style={{ width: "auto", height: "auto", borderRadius: 6 }}
               />
               Tales For <span className="text-[24px] font-bold">Nights</span>
             </Link>
@@ -55,7 +55,7 @@ export default function Navbar() {
               {
                 isAuthenticated &&
                 <IconButton onClick={toggleMenu}>
-                  {isMenuOpen?<CloseRounded sx={{color:"whitesmoke"}} fontSize="large" />:<MenuRounded sx={{color:"whitesmoke"}} fontSize="large" />}
+                  {isMenuOpen ? <CloseRounded sx={{ color: "whitesmoke" }} fontSize="large" /> : <MenuRounded sx={{ color: "whitesmoke" }} fontSize="large" />}
                 </IconButton>
               }
             </div>
