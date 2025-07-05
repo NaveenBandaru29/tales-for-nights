@@ -27,16 +27,16 @@ export default function CreateTalePage() {
             ← Back to dashboard
           </Link>
         </div>
-        
-        <h1 className="text-3xl font-bold mb-8">Create New Tale</h1>
-        
+
+        {/* <h1 className="text-3xl font-bold mb-8">Create New Tale</h1> */}
+
         {/* {error && (
           <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
             <p>Error: Failed to create tale. Please try again.</p>
           </div>
         )} */}
-        
-        <TaleForm  />
+
+        <TaleForm />
       </div>
     </AuthGuard>
   );

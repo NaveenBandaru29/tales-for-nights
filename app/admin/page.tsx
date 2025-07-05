@@ -10,14 +10,14 @@ import AuthGuard from "../components/auth/AuthGuard"; // Component that checks i
 import {
   useGetTalesQuery, // API hook for fetching tales data
   useDeleteTaleMutation, // API hook for deleting a tale
-} from "../store/apis/talesApi"; 
+} from "../store/apis/talesApi";
 import { useDeleteRawMutation, useGetRawsQuery } from "../store/apis/rawApi"; // API hooks for fetching and deleting raw items
-const DeleteModal = dynamic(()=>import("../components/ui/DeleteModal")) ; // Modal component to confirm deletion
-const AdminManageSection = dynamic(()=>import("../components/admin/AdminManageSection")) ; // Section component to manage tales and raws
+const DeleteModal = dynamic(() => import("../components/ui/DeleteModal")); // Modal component to confirm deletion
+const AdminManageSection = dynamic(() => import("../components/admin/AdminManageSection")); // Section component to manage tales and raws
 
 export default function AdminPage() {
   // Fetch tales data using the API query hook
-  const { data: tales, isLoading, isError, refetch } = useGetTalesQuery();
+  const { data: tales, isLoading, isError, refetch } = useGetTalesQuery({ limit: 2, page: 1 });
 
   // Fetch raw data using the API query hook
   const {
@@ -85,31 +85,31 @@ export default function AdminPage() {
     // AuthGuard ensures the page is accessible only to admin users
     <AuthGuard requireAdmin>
       <div className="h-full bg-gray-50 container mx-auto">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        {/* AdminManageSection to display and manage tales */}
-        <AdminManageSection
-          isError={isError} // Show error if tales data fetching fails
-          errorText="Error loading tales. Please try again." // Error message
-          isLoading={isLoading} // Show loading state while fetching data
-          loadingText="Loading Tales..." // Loading message
-          items={tales} // Pass the tales data
-          openDeleteModal={(id) => openDeleteTaleModal(id)} // Function to open delete modal for a tale
-          manageItemsTitle="Tales" // Title for the section
-          seeMoreLink="/" // Link to view more tales
-        />
-
-        {/* AdminManageSection to display and manage raws */}
-        <AdminManageSection
-          isError={isRawError} // Show error if raws data fetching fails
-          errorText="Error loading raws. Please try again." // Error message
-          isLoading={israwLoading} // Show loading state while fetching data
-          loadingText="Loading Raws..." // Loading message
-          items={raws?.data} // Pass the raws data
-          openDeleteModal={(id) => openDeleteRawModal(id)} // Function to open delete modal for a raw
-          manageItemsTitle="Raws" // Title for the section
-          seeMoreLink="/raw" // Link to view more raws
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+          {/* AdminManageSection to display and manage tales */}
+          <AdminManageSection
+            isError={isError} // Show error if tales data fetching fails
+            errorText="Error loading tales. Please try again." // Error message
+            isLoading={isLoading} // Show loading state while fetching data
+            loadingText="Loading Tales..." // Loading message
+            items={tales?.data} // Pass the tales data
+            openDeleteModal={(id) => openDeleteTaleModal(id)} // Function to open delete modal for a tale
+            manageItemsTitle="Tales" // Title for the section
+            seeMoreLink="/" // Link to view more tales
           />
-      </main>
+
+          {/* AdminManageSection to display and manage raws */}
+          <AdminManageSection
+            isError={isRawError} // Show error if raws data fetching fails
+            errorText="Error loading raws. Please try again." // Error message
+            isLoading={israwLoading} // Show loading state while fetching data
+            loadingText="Loading Raws..." // Loading message
+            items={raws?.data} // Pass the raws data
+            openDeleteModal={(id) => openDeleteRawModal(id)} // Function to open delete modal for a raw
+            manageItemsTitle="Raws" // Title for the section
+            seeMoreLink="/raw" // Link to view more raws
+          />
+        </main>
 
         {/* Delete Confirmation Modal for tales */}
         {showDeleteTaleModal && (

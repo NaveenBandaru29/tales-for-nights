@@ -11,12 +11,12 @@ export const rawApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       // Get token from auth state
       const token = (getState() as RootState).auth.token;
-      
+
       // If we have a token, include it in the headers
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
-      
+
       return headers;
     },
   }),
@@ -33,18 +33,18 @@ export const rawApi = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.data.map(({ _id }) => ({ type: 'Raw' as const, id: _id })),
-              { type: 'Raw', id: 'LIST' },
-            ]
+            ...result.data.map(({ _id }) => ({ type: 'Raw' as const, id: _id })),
+            { type: 'Raw', id: 'LIST' },
+          ]
           : [{ type: 'Raw', id: 'LIST' }],
     }),
-    
+
     getRawById: builder.query<Raw, string>({
       query: (id) => `/raw/${id}`,
       transformResponse: (response: { success: boolean; data: Raw }) => response.data,
       providesTags: (result, error, id) => [{ type: 'Raw', id }],
     }),
-    
+
     createRaw: builder.mutation<Raw, RawFormData>({
       query: (rawData) => ({
         url: '/raw',
@@ -54,7 +54,7 @@ export const rawApi = createApi({
       transformResponse: (response: { success: boolean; data: Raw }) => response.data,
       invalidatesTags: [{ type: 'Raw', id: 'LIST' }],
     }),
-    
+
     updateRaw: builder.mutation<Raw, { id: string; rawData: RawFormData }>({
       query: ({ id, rawData }) => ({
         url: `/raw/${id}`,
@@ -67,7 +67,7 @@ export const rawApi = createApi({
         { type: 'Raw', id: 'LIST' },
       ],
     }),
-    
+
     deleteRaw: builder.mutation<{ id: string }, string>({
       query: (id) => ({
         url: `/raw/${id}`,

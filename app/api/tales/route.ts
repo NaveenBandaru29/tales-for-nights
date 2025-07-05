@@ -4,15 +4,29 @@ import Tale from '../../models/Tale';
 import connectToDatabase from '../../lib/mongodb';
 import { isAdmin } from '../../lib/jwt';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectToDatabase();
     console.log("Connected to db....")
-    const tales = await Tale.find().sort({ createdAt: -1 });
+    const searchParams = request.nextUrl.searchParams;
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+
+    const skip = (page - 1) * limit;
+    const tales = await Tale.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+    // Get total count for pagination
+    const total = await Tale.countDocuments();
 
     return NextResponse.json({
       success: true,
       data: tales,
+      pagination: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     console.error('Error fetching tales:', error);
