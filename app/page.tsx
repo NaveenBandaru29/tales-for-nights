@@ -6,7 +6,6 @@ const TalesList = dynamic(() => import('./components/tales/TalesList'));
 export default function HomePage() {
   return (
     <main className="">
-      {/* <NavTags /> */}
       <div className='flex gap-4 justify-between items-center mb-8'>
         <div className='flex flex-col'>
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">Tales</h1>
