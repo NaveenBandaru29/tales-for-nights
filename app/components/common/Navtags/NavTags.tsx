@@ -5,15 +5,18 @@ import NavChip, { NavChipProps } from './NavChip'
 const navChips: NavChipProps[] = [
   {
     name: "Scars",
-    path: "/"
+    path: "/",
+    hot: false
   },
-  // {
-  //   name: "Charm",
-  //   path: "/quotes"
-  // },
+  {
+    name: "Charm",
+    path: "/charm",
+    hot: true
+  },
   {
     name: "Venom ☠️",
-    path: "/raw"
+    path: "/raw",
+    hot: false
   },
   // {
   //   name:"Lyrics",
@@ -26,8 +29,8 @@ const NavTags = () => {
   return (
     <div className='pb-4 flex gap-2 sm:gap-4 flex-wrap'>
       {
-        navChips?.map(({ name, path }: NavChipProps, index) => (
-          <NavChip key={path + index} name={name} path={path} />
+        navChips?.map(({ name, path, hot }: NavChipProps, index) => (
+          <NavChip key={path + index} name={name} path={path} hot={hot} />
         ))
       }
     </div>

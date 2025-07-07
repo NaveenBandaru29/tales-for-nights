@@ -7,9 +7,9 @@ import { useRouter } from 'next/navigation';
 import { Tag, TaleFormData } from '../../types';
 import { useCreateTaleMutation, useUpdateTaleMutation, useGetTaleByIdQuery } from '../../store/apis/talesApi';
 import { Loader } from '../ui/Loader';
-import TaleEditor from './TaleEditor';
 import { MultiValue } from 'react-select';
 import SelectField from '../ui/SelectField';
+import CustomEditor from '../common/CustomEditor';
 
 
 interface TaleFormProps {
@@ -243,7 +243,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
             /> */}
 
             {/* <CustomEditor content={formData.content} setContent={setContent} /> */}
-            {isEdit ? formData && formData.content && <TaleEditor content={formData.content} setContent={setContent} /> : <TaleEditor content={formData.content} setContent={setContent} />}
+            {isEdit ? formData && formData.content && <CustomEditor content={formData.content} setContent={setContent} showPreview /> : <CustomEditor content={formData.content} setContent={setContent} showPreview />}
             {formErrors.content && (
               <p className="mt-1 text-red-600 text-sm">{formErrors.content}</p>
             )}

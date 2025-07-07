@@ -9,45 +9,56 @@ import {
   useUpdateRawMutation,
 } from "@/app/store/apis/rawApi";
 import SearchBar from "./SearchBar";
-import RawForm from "./RawForm";
-import RawItem from "./RawItem";
-// import Pagination from "../ui/Pagination";
-import RawEditForm from "./RawEditForm";
-import RawDelete from "./RawDelete";
-import RawPin from "./RawPin"
 import { AddCircleRounded, RemoveCircleRounded } from "@mui/icons-material"
 import { PaginationParams, Raw } from "@/app/types/Raw";
 import { Loader } from "../ui/Loader";
-import Paginator from "../ui/Paginator";
+import dynamic from "next/dynamic";
+const Paginator = dynamic(() => import('../ui/Paginator'), { ssr: false });
+const RawDelete = dynamic(() => import('../raw/RawDelete'), { ssr: false });
+const RawItem = dynamic(() => import('../raw/RawItem'), { ssr: false });
+const RawEditForm = dynamic(() => import('../raw/RawEditForm'), { ssr: false });
+const RawPin = dynamic(() => import('../raw/RawPin'), { ssr: false });
+const RawForm = dynamic(() => import('../raw/RawForm'), { ssr: false });
 
 export default function RawList() {
+  // Redux - Global state
+  const { user, isAuthenticated }: any = useSelector((state: RootState) => state.auth);
+  const isAdmin = isAuthenticated && user?.isAdmin;
+
+  // Local state - Pagination & UI control
   const [searchParams, setSearchParams] = useState<PaginationParams>({
     query: "",
     page: 1,
     limit: 10,
   });
-
-  const { user, isAuthenticated }: any = useSelector(
-    (state: RootState) => state.auth
-  );
-  const isAdmin = isAuthenticated && user?.isAdmin;
-  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
-  const [pinConfirm, setPinConfirm] = useState<string | null>(null)
-  const [edit, setEdit] = useState<string | null>(null);
-  const [deleteRaw, { isLoading: isDeleting }] = useDeleteRawMutation();
   const [addRaw, setAddRaw] = useState<boolean>(false);
+
+  // Local state - Modals / Item state
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [pinId, setPinId] = useState<string | null>(null);
+  const [edit, setEdit] = useState<string | null>(null);
+
+  // Data fetching
   const { data, isLoading, error } = useGetRawsQuery(searchParams);
+
+  // Mutations
+  const [deleteRaw, { isLoading: isDeleting }] = useDeleteRawMutation();
+  const [updateRaw, { isLoading: isUpdating }] = useUpdateRawMutation();
+
+  // Derived data
   const raws = data?.data || [];
   const totalPages = data?.pagination?.pages || 1;
+
+  // Handlers
 
   // Handle search query update
   const handleSearch = (query: string) => {
     setSearchParams((prev: any) => ({
       ...prev,
       query,
-      page: 1, // Reset to first page when a new search is performed
+      page: 1,
     }));
-    setAddRaw(false)
+    setAddRaw(false);
   };
 
   // Handle page change for pagination
@@ -56,27 +67,23 @@ export default function RawList() {
       ...prev,
       page,
     }));
-    setAddRaw(false)
+    setAddRaw(false);
   };
-
-  const [updateRaw, { isLoading: isUpdating }] = useUpdateRawMutation();
 
   // Handle saving updates to RAW content
   const handleSave = async (id: string, raw: Raw) => {
-    const { content, pinned, tags } = raw
+    const { content, pinned, tags } = raw;
     if (!content.trim()) return;
-    const rawData = {
-      content,
-      pinned,
-      tags
-    }
+
+    const rawData = { content, pinned, tags };
+
     try {
       await updateRaw({ id, rawData }).unwrap();
-      setEdit(null); // Clear edit mode after saving
+      setEdit(null);
     } catch (err) {
       console.error("Failed to update RAW:", err);
     }
-    setAddRaw(false)
+    setAddRaw(false);
   };
 
   // Handle delete action with confirmation
@@ -84,51 +91,65 @@ export default function RawList() {
     if (deleteConfirm === id) {
       try {
         await deleteRaw(id).unwrap();
-        setDeleteConfirm(null); // Reset delete confirmation after deletion
+        setDeleteConfirm(null);
       } catch (error) {
         console.error("Failed to delete RAW:", error);
       }
     } else {
-      setDeleteConfirm(id); // Set the ID for the delete confirmation prompt
+      setDeleteConfirm(id);
     }
-    setAddRaw(false)
+    setAddRaw(false);
   };
 
+  // Handle pin toggle with confirmation
   const handlePin = async (id: string, pinned: boolean, content: string, tags: string[]) => {
-    if (pinConfirm === id) {
+    if (pinId === id) {
       try {
         await updateRaw({ id, rawData: { content, pinned, tags } }).unwrap();
       } catch (err) {
         console.error("Failed to update RAW:", err);
       }
-      setPinConfirm(null)
+      setPinId(null);
+    } else {
+      setPinId(id);
     }
-    else {
-      setPinConfirm(id)
-    }
-    setAddRaw(false)
-  }
+    setAddRaw(false);
+  };
 
-  const handleEditClick = (raw: Raw) => {
-    setAddRaw(false)
-    setEdit(raw._id)
-    setDeleteConfirm(null)
-  }
+  // Handle edit click
+  const handleEditClick = (id: string) => {
+    setAddRaw(false);
+    setEdit(id);
+    setDeleteConfirm(null);
+    setPinId(null)
+  };
 
+  // Handle delete click
   const handleDeleteClick = (id: string) => {
-    setDeleteConfirm(id)
+    setDeleteConfirm(id);
+    setAddRaw(false);
+    setEdit(null);
+    setPinId(null)
+  };
+
+  // Handle add toggle
+  const handleAddClick = () => {
+    setAddRaw((prev: boolean) => !prev);
+    setDeleteConfirm(null);
+    setEdit(null);
+    setPinId(null)
+  };
+  // Handle pin click
+  const handlePinClick = (id: string) => {
+    setPinId(id)
     setAddRaw(false)
-    setEdit(null)
+    setDeleteConfirm(null);
+    setEdit(null);
   }
 
-  const handleAddClick = () => {
-    setAddRaw((prev: boolean) => !prev)
-    setDeleteConfirm(null)
-    setEdit(null)
-  }
 
   return (
-    <div className="container mx-auto">
+    <div className="mx-auto">
       <div className="mb-6 flex gap-2 sm:gap-4">
         <SearchBar placeholder="Search by Content/Tags..." onSearch={handleSearch} />
         {isAdmin && (
@@ -145,7 +166,7 @@ export default function RawList() {
         )}
       </div>
 
-      {isAdmin && addRaw && <RawForm handleFormClose={() => setAddRaw(false)} />}
+      {isAdmin && addRaw && <RawForm identifier="RAW" handleFormClose={() => setAddRaw(false)} />}
 
       {isLoading ? (<Loader loadingText="Loading Raws..." />)
         : error ? (
@@ -172,6 +193,7 @@ export default function RawList() {
                 {edit === raw._id && isAdmin && (
                   <RawEditForm
                     // content={content}
+                    identifier="RAW"
                     raw={raw}
                     handleSave={handleSave}
                     isUpdating={isUpdating}
@@ -180,9 +202,9 @@ export default function RawList() {
                   />
                 )}
                 {
-                  pinConfirm === raw._id && isAdmin && (
+                  pinId === raw._id && isAdmin && (
                     <RawPin
-                      handleCancel={() => setPinConfirm(null)}
+                      handleCancel={() => setPinId(null)}
                       isPinning={isUpdating}
                       handlePin={() => handlePin(raw._id, !raw.pinned, raw.content, raw.tags)}
                       pinned={raw.pinned}
@@ -196,10 +218,10 @@ export default function RawList() {
                     isAdmin={isAdmin ? true : false}
                     onEdit={
                       isAdmin
-                        ? () => handleEditClick(raw) : undefined
+                        ? () => handleEditClick(raw._id) : undefined
                     }
                     onDelete={isAdmin ? () => handleDeleteClick(raw._id) : undefined}
-                    onPin={isAdmin ? () => setPinConfirm(raw._id) : undefined}
+                    onPin={isAdmin ? () => handlePinClick(raw._id) : undefined}
                   />)}
               </div>
             ))}
