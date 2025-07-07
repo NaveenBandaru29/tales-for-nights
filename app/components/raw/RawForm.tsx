@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { MultiValue } from "react-select"
 import SelectField from '../ui/SelectField';
 import { Loader } from '../ui/Loader';
+import { useCreateCharmMutation } from '@/app/store/apis/charmApi';
+import { Button } from '@mui/material';
 const CustomEditor = dynamic(() => import('../common/CustomEditor'), { ssr: false, loading: () => <Loader loadingText='Loading Editor...' /> })
 
 export interface Tag {
@@ -28,10 +30,16 @@ export const tags: Tag[] = [
 
 ];
 
-export default function RawForm({ handleFormClose }: { handleFormClose: () => void }) {
+export interface RawFormPorps {
+  handleFormClose: () => void;
+  identifier: "RAW" | "CHARM"
+}
+
+export default function RawForm({ handleFormClose, identifier }: RawFormPorps) {
   const [content, setContent] = useState('');
   const [selectedTags, setSelectedTags] = useState<MultiValue<Tag>>([])
   const [createRaw, { isLoading }] = useCreateRawMutation();
+  const [createCharm, { isLoading: isAdding }] = useCreateCharmMutation();
 
   const handleTagsChange = (newValues: MultiValue<Tag>) => {
     setSelectedTags(newValues)
@@ -41,17 +49,22 @@ export default function RawForm({ handleFormClose }: { handleFormClose: () => vo
     e.preventDefault();
     if (!content.trim()) return;
     const allTags = selectedTags.map((tag: Tag) => tag.label) || []
-    const rawData = {
+    const data = {
       content,
       pinned: false,
       tags: allTags
     }
     try {
-      await createRaw(rawData).unwrap();
+      if (identifier === "RAW") {
+        await createRaw(data).unwrap();
+      }
+      else {
+        await createCharm(data).unwrap()
+      }
       setContent(''); // Clear form after successful submission
       setSelectedTags([])
     } catch (err) {
-      console.error('Failed to create RAW:', err);
+      console.error(`Failed to create ${identifier}:`, err);
     }
     handleFormClose()
   };
@@ -69,30 +82,40 @@ export default function RawForm({ handleFormClose }: { handleFormClose: () => vo
           required
           /> */}
         <CustomEditor
-          placeholder="Enter RAW content..."
+          placeholder="Enter content..."
           showPreview
           content={content}
           setContent={setContent}
 
         />
-        <SelectField
+        {identifier === "RAW" && <SelectField
           isMulti
           isClearable
           options={tags}
           value={selectedTags}
           onChange={handleTagsChange}
           placeholder="Select or Create a tag..."
-        />
+        />}
       </div>
 
-
-      <button
-        type="submit"
-        disabled={isLoading || !content.trim()}
-        className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-all ease-in-out duration-300"
-      >
-        {isLoading ? 'Adding...' : 'Add RAW'}
-      </button>
+      <div className="flex gap-3">
+        <Button
+          type='submit'
+          disabled={isLoading || isAdding || !content.trim()}
+          variant="contained"
+        // className="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none disabled:opacity-50 transition"
+        >
+          {(isLoading || isAdding) ? 'Adding...' : 'Add'}
+        </Button>
+        <Button
+          onClick={handleFormClose}
+          color="error"
+          variant="contained"
+        // className="px-3 py-1 text-sm bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:outline-none transition"
+        >
+          Cancel
+        </Button>
+      </div>
     </form>
   );
 }

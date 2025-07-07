@@ -1,10 +1,14 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
-import {PlayCircleRounded,PauseCircleRounded} from "@mui/icons-material"
-const AudioPlayer: React.FC = () => {
+import { PlayCircleRounded, PauseCircleRounded } from "@mui/icons-material"
+
+interface AudioPlayerProps {
+  source: string;
+}
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ source }) => {
   // State to track if the audio is playing or paused
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  
+
   // Ref to hold the audio element
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -16,7 +20,7 @@ const AudioPlayer: React.FC = () => {
           setIsPlaying(true); // Update the state to reflect that the audio is playing
         }
       } catch (error) {
-        console.log('Error playing audio. Please check the file format or your browser settings.',error);
+        console.log('Error playing audio. Please check the file format or your browser settings.', error);
       }
     };
 
@@ -37,12 +41,12 @@ const AudioPlayer: React.FC = () => {
   return (
     <div className="flex items-center gap-2">
       <audio ref={audioRef} loop>
-        <source src={"/theme.mp3"} type="audio/mp3" />
+        <source src={source} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
       <span>Music</span>
-      <button 
-        onClick={togglePlayPause} 
+      <button
+        onClick={togglePlayPause}
         className="cursor-pointer active:scale-90 duration-300"
       >
         {isPlaying ? <PauseCircleRounded fontSize='large' className='text-red-400' /> : <PlayCircleRounded fontSize='large' className='text-green-500' />}
