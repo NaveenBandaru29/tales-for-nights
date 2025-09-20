@@ -13,6 +13,7 @@ import { AddCircleRounded, RemoveCircleRounded } from "@mui/icons-material"
 import { PaginationParams, Raw } from "@/app/types/Raw";
 import { Loader } from "../ui/Loader";
 import dynamic from "next/dynamic";
+import { IconButton, Tooltip } from "@mui/material";
 const Paginator = dynamic(() => import('../ui/Paginator'), { ssr: false });
 const RawDelete = dynamic(() => import('../raw/RawDelete'), { ssr: false });
 const RawItem = dynamic(() => import('../raw/RawItem'), { ssr: false });
@@ -149,20 +150,32 @@ export default function RawList() {
 
 
   return (
-    <div className="mx-auto">
-      <div className="mb-6 flex gap-2 sm:gap-4">
+    <div className="mx-auto w-full">
+      <div className="mb-6 flex gap-2 sm:gap-4 items-center">
         <SearchBar placeholder="Search by Content/Tags..." onSearch={handleSearch} />
         {isAdmin && (
-          <button
-            className="cursor-pointer active:scale-95 duration-300"
-            onClick={handleAddClick}
-          >
-            {addRaw ? (
-              <RemoveCircleRounded className="text-red-500" fontSize="large" />
-            ) : (
-              <AddCircleRounded className="text-blue-500" fontSize="large" />
-            )}
-          </button>
+          <Tooltip title="Add Raw">
+            <IconButton
+              onClick={handleAddClick}
+              sx={{
+                color: addRaw ? 'error.main' : 'primary.main',
+                '&:hover': {
+                  color: addRaw ? 'error.dark' : 'primary.dark',
+                },
+                transition: 'transform 0.2s',
+                transform: 'scale(1.0)',
+                '&:active': {
+                  transform: 'scale(0.95)',
+                }
+              }}
+            >
+              {addRaw ? (
+                <RemoveCircleRounded fontSize="large" />
+              ) : (
+                <AddCircleRounded fontSize="large" />
+              )}
+            </IconButton>
+          </Tooltip>
         )}
       </div>
 
@@ -170,11 +183,11 @@ export default function RawList() {
 
       {isLoading ? (<Loader loadingText="Loading Raws..." />)
         : error ? (
-          <div className="bg-red-100 text-red-700 p-4 rounded-lg">
+          <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 p-6 rounded-lg shadow-md transition-colors duration-300">
             Error loading RAWs. Please try again.
           </div>
         ) : raws.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-16 text-gray-500 dark:text-gray-400 transition-colors duration-300">
             {searchParams.query
               ? `No RAWs found matching "${searchParams.query}"`
               : "No RAWs available"}
@@ -192,12 +205,10 @@ export default function RawList() {
                 )}
                 {edit === raw._id && isAdmin && (
                   <RawEditForm
-                    // content={content}
                     identifier="RAW"
                     raw={raw}
                     handleSave={handleSave}
                     isUpdating={isUpdating}
-                    // setContent={setContent}
                     handleCancel={() => setEdit(null)}
                   />
                 )}
