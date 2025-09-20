@@ -2,7 +2,7 @@ const { typography } = require('@mui/system');
 
 module.exports = {
   purge: [],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
       // typography: ({ theme }) => (
@@ -26,5 +26,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require('@tailwindcss/typography'),typography],
+  plugins: [require('@tailwindcss/typography'), typography],
 }

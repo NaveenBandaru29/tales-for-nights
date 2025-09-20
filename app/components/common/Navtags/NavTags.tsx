@@ -1,6 +1,5 @@
-import React from 'react'
-import NavChip, { NavChipProps } from './NavChip'
-
+import React from 'react';
+import NavChip, { NavChipProps } from './NavChip';
 
 const navChips: NavChipProps[] = [
   {
@@ -18,23 +17,18 @@ const navChips: NavChipProps[] = [
     path: "/raw",
     hot: false
   },
-  // {
-  //   name:"Lyrics",
-  //   path:'/lyrics'
-  // },
-
-]
+];
 
 const NavTags = () => {
   return (
-    <div className='pb-4 flex gap-2 sm:gap-4 flex-wrap'>
+    <div className='pb-4 flex gap-2 sm:gap-4 flex-wrap transition-colors duration-500'>
       {
         navChips?.map(({ name, path, hot }: NavChipProps, index) => (
           <NavChip key={path + index} name={name} path={path} hot={hot} />
         ))
       }
     </div>
-  )
-}
+  );
+};
 
-export default NavTags
+export default NavTags;

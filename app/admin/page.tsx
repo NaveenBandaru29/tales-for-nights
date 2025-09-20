@@ -84,7 +84,7 @@ export default function AdminPage() {
   return (
     // AuthGuard ensures the page is accessible only to admin users
     <AuthGuard requireAdmin>
-      <div className="h-full bg-gray-50 container mx-auto">
+      <div className="h-full container mx-auto">
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           {/* AdminManageSection to display and manage tales */}
           <AdminManageSection

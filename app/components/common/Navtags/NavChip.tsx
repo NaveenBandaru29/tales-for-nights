@@ -15,16 +15,30 @@ const NavChip = ({ path, name, hot }: NavChipProps) => {
     const isActive = (pathname === path)
 
     return (
-        <Link href={path} className={`relative text-white text-[16px] sm:text-md px-3 sm:px-4 py-1 rounded-full hover:bg-blue-400 duration-300 ${isActive ? "bg-blue-500" : "bg-gray-400"} `}>
+        <Link
+            href={path}
+            className={`
+                relative 
+                text-sm sm:text-base 
+                px-4 py-2 
+                rounded-full 
+                font-medium
+                transition-colors duration-300
+                ${isActive
+                    ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
+                    : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                }
+                hover:bg-gray-300 dark:hover:bg-gray-600
+            `}
+        >
             {name}
             {
-                hot &&
-                <div className='absolute top-[2px] right-[2px]'>
-                    <span className="relative flex size-2">
+                hot && (
+                    <span className="absolute top-1 right-1 flex size-2">
                         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
                         <span className="relative inline-flex size-2 rounded-full bg-red-500"></span>
                     </span>
-                </div>
+                )
             }
         </Link>
     )

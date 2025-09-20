@@ -1,5 +1,3 @@
-
-// components/tales/TalesList.tsx
 'use client';
 
 import { useState } from 'react';
@@ -51,6 +49,7 @@ export default function TalesList() {
       page,
     }));
   };
+
   if (isLoading) {
     return (
       <Loader loadingText='Loading Tales...' />
@@ -59,20 +58,21 @@ export default function TalesList() {
 
   if (error) {
     return (
-      <div className="bg-red-100 text-red-700 p-4 rounded-md">
-        Failed to load tales. Please try again later.
+      <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 p-4 rounded-md shadow-md">
+        <p>Failed to load tales. Please try again later.</p>
+        <p className="mt-2 text-sm">Error details: {JSON.stringify(error)}</p>
       </div>
     );
   }
 
   if (tales.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-600">No tales found.</p>
+      <div className="text-center py-16 px-4">
+        <p className="text-xl font-semibold text-gray-500 dark:text-gray-400">No tales found.</p>
         {isAdmin && (
           <button
             onClick={() => router.push('/admin/create')}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="mt-6 px-6 py-3 bg-blue-600 dark:bg-blue-700 text-white rounded-lg shadow-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200"
           >
             Create your first tale
           </button>
@@ -80,31 +80,33 @@ export default function TalesList() {
       </div>
     );
   }
+
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {tales.map((tale: Tale) => (
-          <div key={tale._id} className="relative">
+          <div key={tale._id} className="relative transition-transform duration-300 hover:scale-[1.02]">
             {deleteConfirm === tale._id && (
-              <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center z-10 rounded-lg shadow-md">
-                <p className="text-center mb-4">Are you sure you want to delete this tale?</p>
+              <div className="absolute inset-0 bg-white dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90 flex flex-col items-center justify-center z-10 rounded-lg shadow-xl backdrop-blur-sm p-4">
+                <p className="text-center mb-4 text-gray-900 dark:text-gray-100 font-semibold">
+                  Are you sure you want to delete this tale?
+                </p>
                 <div className="flex space-x-4">
                   <button
                     onClick={() => handleDelete(tale._id)}
-                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                    className="px-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
                   >
                     Yes, Delete
                   </button>
                   <button
                     onClick={() => setDeleteConfirm(null)}
-                    className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                    className="px-5 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors duration-200"
                   >
                     Cancel
                   </button>
                 </div>
               </div>
             )}
-
             <TaleCard
               tale={tale}
               onEdit={isAdmin ? () => handleEdit(tale._id) : undefined}
@@ -114,7 +116,7 @@ export default function TalesList() {
         ))}
       </div>
       {totalPages > 1 && (
-        <div className="mt-8 flex justify-center">
+        <div className="mt-12 flex justify-center">
           <Paginator count={totalPages} onChange={handlePageChange} page={searchParams.page || 1} />
         </div>
       )}

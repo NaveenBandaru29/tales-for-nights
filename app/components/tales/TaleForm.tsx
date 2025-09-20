@@ -1,5 +1,3 @@
-
-// components/tales/TaleForm.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -10,6 +8,7 @@ import { Loader } from '../ui/Loader';
 import { MultiValue } from 'react-select';
 import SelectField from '../ui/SelectField';
 import CustomEditor from '../common/CustomEditor';
+import { Button } from '@mui/material';
 
 
 interface TaleFormProps {
@@ -163,21 +162,21 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
   }
 
   return (
-    <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden transition-colors duration-300">
       <div className="p-6 sm:p-8">
-        <h2 className="text-2xl font-bold mb-6">
+        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
           {isEdit ? 'Edit Tale' : 'Create New Tale'}
         </h2>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
+          <div className="mb-6 p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 rounded-md">
             Failed to {isEdit ? 'update' : 'create'} tale. Please try again.
           </div>
         )}
 
         <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
           <div>
-            <label htmlFor="title" className="block text-gray-700 mb-2">
+            <label htmlFor="title" className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
               Title <span className="text-red-600">*</span>
             </label>
             <input
@@ -186,7 +185,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.title ? 'border-red-500' : 'border-gray-300'
+              className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 transition-colors duration-200 ${formErrors.title ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
               placeholder="Enter tale title"
             />
@@ -196,7 +195,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-gray-700 mb-2">
+            <label htmlFor="description" className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
               Description <span className="text-red-600">*</span>
             </label>
             <textarea
@@ -205,7 +204,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
               value={formData.description}
               onChange={handleChange}
               rows={3}
-              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.description ? 'border-red-500' : 'border-gray-300'
+              className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600 transition-colors duration-200 ${formErrors.description ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'
                 }`}
               placeholder="Enter a brief description"
             />
@@ -214,8 +213,8 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
             )}
           </div>
           <div >
-            <label htmlFor="description" className="block text-gray-700 mb-2">
-              Tags {/* <span className="text-red-600">*</span> */}
+            <label htmlFor="description" className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+              Tags
             </label>
             <SelectField
               isMulti
@@ -228,39 +227,28 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
           </div>
 
           <div>
-            {/* <label htmlFor="content" className="block text-gray-700 mb-2">
-              Content <span className="text-red-600">*</span>
-            </label>
-            <textarea
-              id="content"
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
-              rows={10}
-              className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.content ? 'border-red-500' : 'border-gray-300'
-                }`}
-              placeholder="Enter the tale content"
-            /> */}
-
-            {/* <CustomEditor content={formData.content} setContent={setContent} /> */}
-            {isEdit ? formData && formData.content && <CustomEditor content={formData.content} setContent={setContent} showPreview /> : <CustomEditor content={formData.content} setContent={setContent} showPreview />}
+            {/* <CustomEditor content={formData.content} setContent={setContent} showPreview /> */}
+            {isEdit ? formData && formData.content &&
+              <CustomEditor content={formData.content} setContent={setContent} showPreview /> :
+              <CustomEditor content={formData.content} setContent={setContent} showPreview />}
             {formErrors.content && (
               <p className="mt-1 text-red-600 text-sm">{formErrors.content}</p>
             )}
           </div>
 
-          <div className="flex justify-end space-x-4">
-            <button
+          <div className="flex justify-end gap-4 mt-6">
+            <Button
               type="button"
               onClick={() => router.back()}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+              variant='contained'
+              color='error'
             >
               Cancel
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
               disabled={isLoading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+              variant='contained'
             >
               {isLoading
                 ? isEdit
@@ -269,7 +257,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
                 : isEdit
                   ? 'Update Tale'
                   : 'Create Tale'}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

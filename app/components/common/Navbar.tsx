@@ -1,28 +1,66 @@
 // components/ui/Navbar.tsx
+
 "use client";
 
+
+
 import Link from "next/link";
+
 import { useSelector } from "react-redux";
+
 import { RootState } from "../../store";
+
 import { usePathname } from "next/navigation";
+
 import { useEffect, useState } from "react";
+
 import LogoutButton from "../auth/LoginButton";
+
 import Image from "next/image";
-import { IconButton } from "@mui/material"
-import { MenuRounded, CloseRounded } from '@mui/icons-material';
+
+import { IconButton, Tooltip } from "@mui/material";
+
+import { MenuRounded, CloseRounded } from "@mui/icons-material";
+
+import ThemeToggle from "./ThemeToggle";
+
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+import DashboardIcon from '@mui/icons-material/Dashboard';
+
+import { useTheme } from "@/app/context/ThemeContext";
+
+
 
 export default function Navbar() {
-  const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth
-  );
+
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+
   const pathname = usePathname();
 
-  const isActive = (path: string) => {
-    return pathname === path ? "bg-blue-700" : "";
-  };
+  const { isDarkMode } = useTheme()
 
-  // State to toggle the mobile menu visibility
+
+
+  const isActive = (path: string) => (pathname === path ? "bg-gray-200 text-gray-900 dark:bg-slate-700 dark:text-white" : "text-gray-900 dark:text-gray-100");
+
+
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Disable body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMenuOpen]);
+
+  // Close menu on route change
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
@@ -31,124 +69,184 @@ export default function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+
+
   return (
-    <nav className="bg-blue-600 text-white shadow-md">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex justify-between items-center h-16 ">
-          <div className="flex items-center justify-between md:justify-start w-[100vw]">
-            <Link
-              href="/"
-              className="text-xl font-semibold flex gap-2 items-center"
-            >
-              <Image
-                src={"/TFN_LOGO.png"}
-                alt="tfn_logo"
-                width={25}
-                height={25}
-                style={{ width: "auto", height: "auto", borderRadius: 6 }}
-              />
-              Tales For <span className="text-[24px] font-bold">Nights</span>
-            </Link>
 
-            {/* Mobile Menu Toggle Button */}
-            <div className="md:hidden flex">
-              {
-                isAuthenticated &&
-                <IconButton onClick={toggleMenu}>
-                  {isMenuOpen ? <CloseRounded sx={{ color: "whitesmoke" }} fontSize="large" /> : <MenuRounded sx={{ color: "whitesmoke" }} fontSize="large" />}
+    <nav className="bg-slate-50 dark:bg-slate-800 shadow-sm transition-colors duration-500 ease-in-out">
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+
+        <div className="flex justify-between items-center h-16">
+
+          {/* Logo */}
+
+          <Link href="/" className="flex items-center space-x-2">
+
+            <Image
+
+              src={"/TFN_LOGO.png"}
+
+              alt="Tales For Nights logo"
+
+              width={30}
+
+              height={30}
+
+              style={{ borderRadius: "50%" }}
+
+            />
+
+            <div className="flex flex-col">
+
+              <span className="text-lg font-bold text-gray-900 dark:text-white">
+
+                Tales For Nights
+
+              </span>
+
+              <span className="text-xs italic text-gray-500 dark:text-gray-400">
+
+                I walk, I weep, I write
+
+              </span>
+
+            </div>
+
+          </Link>
+
+
+
+          {/* Desktop Navigation Links */}
+
+          <div className="hidden sm:flex items-center gap-2">
+
+            {isAuthenticated && user?.isAdmin && (
+
+              <Tooltip title="Admin Dashboard">
+
+                <IconButton
+
+                  LinkComponent={Link}
+
+                  href="/admin"
+
+                // className={`rounded-md text-sm font-medium transition-colors duration-200 ${isActive("/admin")}`}
+
+                >
+
+                  <DashboardIcon sx={{ color: isDarkMode ? "whitesmoke" : "#111" }} />
+
                 </IconButton>
-              }
-            </div>
 
-            {/* Navigation Links (Desktop) */}
-            <div className="ml-10 hidden md:flex items-center space-x-4">
-              {/* <Link 
-                href="/" 
-                className={`px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 duration-300 ${isActive('/')}`}
-              >
-                Home
-              </Link> */}
+              </Tooltip>
+
+            )}
+
+            <ThemeToggle />
+
+            {isAuthenticated && (
+
               <>
-                {isAuthenticated && user?.isAdmin && (
-                  <>
-                    <Link
-                      href="/admin"
-                      className={`px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 duration-300 ${isActive(
-                        "/admin"
-                      )} mr-4`}
-                    >
-                      Admin Dashboard
-                    </Link>
-                    {/* <Link 
-                    href="/admin/create" 
-                    className={`px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700 duration-300 ${isActive('/admin/create')}`}
-                  >
-                    Create Tale
-                  </Link> */}
-                  </>
-                )}
+
+                <LogoutButton />
+
+                <Tooltip title={user?.isAdmin ? `Admin: ${user?.username}` : user?.username} style={{ cursor: "pointer" }}>
+
+                  <AccountCircleIcon sx={{ fontSize: 30, color: isDarkMode ? "whitesmoke" : "#111" }} color="inherit" />
+
+                </Tooltip>
+
+                {/* <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+
+                  {user?.isAdmin ? "Admin: " : ""}
+
+                  {user?.username}
+
+                </span> */}
+
               </>
-            </div>
+
+            )}
+
           </div>
 
-          <div className="hidden sm:flex items-center ">
-            {
-              isAuthenticated && (
-                <div className="md:flex items-center space-x-4 hidden ">
-                  <span className="text-sm font-medium">
-                    {user?.isAdmin ? "Admin: " : ""}
-                    {user?.username}
-                  </span>
-                  <LogoutButton />
-                </div>
-              )
-              // : (
-              // You can uncomment the login link here if needed for mobile
-              // <Link
-              //   href="/login"
-              //   className="px-4 py-2 rounded-md text-sm font-medium bg-white text-blue-600 hover:bg-gray-100 duration-300"
-              // >
-              //   Login
-              // </Link>
-              // )
-            }
+
+
+          {/* Mobile Menu & Theme Toggle */}
+
+          <div className="sm:hidden flex items-center space-x-2">
+            <ThemeToggle />
+            {isAuthenticated && (
+              <IconButton onClick={toggleMenu} aria-label="Toggle navigation menu">
+                {isMenuOpen ? (
+                  <CloseRounded sx={{ color: isDarkMode ? "whitesmoke" : "#111", fontSize: 30 }} fontSize="medium" />
+                ) : (
+                  <MenuRounded sx={{ color: isDarkMode ? "whitesmoke" : "#111", fontSize: 30 }} fontSize="medium" />
+                )}
+              </IconButton>
+            )}
           </div>
+
         </div>
 
-        {/* Mobile Menu (on smaller screens) */}
-        <div className={`lg:hidden ${isMenuOpen ? "block" : "hidden"}`}>
-          <div className="flex flex-col items-start pb-2 gap-1">
+
+
+        {/* Mobile Menu Content */}
+
+        <div className={`fixed inset-0 z-[45] sm:hidden transition-transform duration-500 ease-in-out transform
+        ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+        >
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={toggleMenu} />
+          <div className="absolute right-0 top-0 h-full w-2/3 max-w-sm bg-white dark:bg-gray-950/90 shadow-lg py-3 px-4 flex flex-col items-start space-y-4">
+            <div className="w-full flex justify-end">
+              <IconButton onClick={toggleMenu} aria-label="Close navigation menu">
+                <CloseRounded sx={{ color: isDarkMode ? "whitesmoke" : "#111", fontSize: 30 }} fontSize="medium" />
+              </IconButton>
+            </div>
             <Link
               href="/"
-              className={`py-4 px-2 w-full rounded-md text-sm font-medium hover:bg-blue-700 duration-300 ${isActive(
-                "/"
-              )}`}
+              className={`w-full px-4 py-3 rounded-md text-base font-medium transition-colors duration-200 text-gray-900 dark:text-gray-100 ${isActive("/")}`}
               onClick={toggleMenu}
             >
-              Home
+              Tales
             </Link>
-
+            <Link
+              href="/raw"
+              className={`w-full px-4 py-3 rounded-md text-base font-medium transition-colors duration-200 text-gray-900 dark:text-gray-100 ${isActive("/raw")}`}
+              onClick={toggleMenu}
+            >
+              Raws
+            </Link>
             {isAuthenticated && user?.isAdmin && (
               <Link
                 href="/admin"
-                className={`py-4 px-2 w-full rounded-md text-sm font-medium hover:bg-blue-700 duration-300 ${isActive(
-                  "/admin"
-                )}`}
+                className={`w-full px-4 py-3 rounded-md text-base font-medium transition-colors duration-200 text-gray-900 dark:text-gray-100 ${isActive("/admin")}`}
                 onClick={toggleMenu}
               >
                 Admin Dashboard
               </Link>
             )}
-
-            {/* Mobile Logout */}
             {isAuthenticated && (
-              <div className="my-2">
-                <LogoutButton />
-              </div>
+              <>
+                <div className="w-full px-4 py-2 text-base font-medium text-gray-700 dark:text-gray-300">
+                  <div className="flex items-center gap-2">
+                    <AccountCircleIcon sx={{ fontSize: 30, color: isDarkMode ? "whitesmoke" : "#111" }} />
+                    <span className="font-bold">{user?.isAdmin ? "Admin: " : ""}{user?.username}</span>
+                  </div>
+                </div>
+                <div className="w-full px-4">
+                  <LogoutButton />
+                </div>
+              </>
             )}
           </div>
         </div>
+
       </div>
+
     </nav>
+
   );
+
 }

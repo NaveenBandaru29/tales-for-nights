@@ -33,7 +33,7 @@ const CharmList = () => {
     const [addCharm, setAddCharm] = useState<boolean>(false);
 
     // Data fetching
-    const { data, isLoading, error } = useGetCharmsQuery(searchParams);
+    const { data, isLoading, isFetching, error } = useGetCharmsQuery(searchParams);
     const charms = data?.data || [];
     const totalPages = data?.pagination?.pages || 1;
 
@@ -133,25 +133,25 @@ const CharmList = () => {
     };
 
 
-
-
     return (
-        <div className="mx-auto">
+        <div className="mx-auto w-full">
             <div className="mb-6 flex gap-2 sm:gap-4">
                 {isAdmin && (
-                    <Button onClick={handleAddClick} color={addCharm ? "error" : "primary"} variant="contained">{addCharm ? "Cancel" : "Add Charm"}</Button>
+                    <Button onClick={handleAddClick} color={addCharm ? "error" : "primary"} variant="contained">
+                        {addCharm ? "Cancel" : "Add Charm"}
+                    </Button>
                 )}
             </div>
 
             {isAdmin && addCharm && <RawForm identifier="CHARM" handleFormClose={() => setAddCharm(false)} />}
 
-            {isLoading ? (<Loader loadingText="Loading Charms..." />)
+            {(isLoading || isFetching) ? (<Loader loadingText="Loading Charms..." />)
                 : error ? (
-                    <div className="bg-red-100 text-red-700 p-4 rounded-lg">
+                    <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 p-6 rounded-lg shadow-md transition-colors duration-300">
                         Error loading Charms. Please try again.
                     </div>
                 ) : charms.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-16 text-gray-500 dark:text-gray-400 transition-colors duration-300">
                         {searchParams.query
                             ? `No Charms found matching "${searchParams.query}"`
                             : "No Charms available"}
@@ -169,12 +169,10 @@ const CharmList = () => {
                                 )}
                                 {edit === charm._id && isAdmin && (
                                     <RawEditForm
-                                        // content={content}
                                         identifier="CHARM"
                                         raw={charm}
                                         handleSave={handleSave}
                                         isUpdating={isUpdating}
-                                        // setContent={setContent}
                                         handleCancel={() => setEdit(null)}
                                     />
                                 )}
