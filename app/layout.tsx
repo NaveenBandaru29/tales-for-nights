@@ -8,6 +8,7 @@ import { Suspense } from 'react';
 import { LazyLoader } from './components/ui/Loader';
 import dynamic from 'next/dynamic';
 import { ThemeProvider } from './context/ThemeContext';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const NavTags = dynamic(() => import('@/app/components/common/Navtags/NavTags'));
 
@@ -40,6 +41,7 @@ export default function RootLayout({
             </ThemeProvider>
           </ReduxProvider>
         </Suspense>
+        <SpeedInsights />
       </body>
     </html>
   );
