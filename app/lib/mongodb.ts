@@ -7,12 +7,14 @@ if (!MONGODB_URI) {
 }
 
 // 1. Correctly declare the global variable type
+/* eslint-disable no-var */
 declare global {
   var mongoose: {
     conn: Mongoose | null;
     promise: Promise<Mongoose> | null;
   };
 }
+/* eslint-disable no-var */
 
 let cached = global.mongoose;
 
