@@ -1,4 +1,3 @@
-// models/Charm.ts
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ICharm extends Document {
@@ -16,13 +15,13 @@ const CharmSchema: Schema = new Schema(
             required: [true, 'Content is required'],
             trim: true,
         },
-        pinned: {  // Define the pinned field
+        pinned: {
             type: Boolean,
-            default: false, // Default value is false, you can change it if needed
+            default: false,
         },
         tags: {
-            type: [String], // Define as an array of strings
-            default: [], // Default is an empty array
+            type: [String],
+            default: [],
         }
     },
     {
@@ -30,7 +29,10 @@ const CharmSchema: Schema = new Schema(
     }
 );
 
-// Add text index for searching
-CharmSchema.index({ content: 'text' });
+// Add a compound index for sorting on `pinned` and `createdAt`
+CharmSchema.index({ pinned: -1, createdAt: -1 });
+
+// To optimize for search, you can add a compound text index
+CharmSchema.index({ content: 'text', tags: 'text' });
 
 export default mongoose.models.Charm || mongoose.model<ICharm>('Charm', CharmSchema);
