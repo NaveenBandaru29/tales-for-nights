@@ -21,7 +21,7 @@ const navChips: NavChipProps[] = [
 
 const NavTags = () => {
   return (
-    <div className='pb-4 flex gap-2 sm:gap-4 flex-wrap transition-colors duration-500'>
+    <div className='pb-4 sm:flex gap-2 sm:gap-4 flex-wrap transition-colors duration-500 hidden'>
       {
         navChips?.map(({ name, path, hot }: NavChipProps, index) => (
           <NavChip key={path + index} name={name} path={path} hot={hot} />

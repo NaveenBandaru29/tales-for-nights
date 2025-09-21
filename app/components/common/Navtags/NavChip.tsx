@@ -26,9 +26,9 @@ const NavChip = ({ path, name, hot }: NavChipProps) => {
                 transition-colors duration-300
                 ${isActive
                     ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
-                    : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                    : "bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                 }
-                hover:bg-gray-300 dark:hover:bg-gray-600
+                hover:bg-gray-200 dark:hover:bg-gray-600
             `}
         >
             {name}
