@@ -16,7 +16,7 @@ export default function TalesList() {
     page: 1,
     limit: 10,
   });
-  const { data, isLoading, error } = useGetTalesQuery(searchParams);
+  const { data, isLoading, error, isFetching } = useGetTalesQuery(searchParams);
   const tales = data?.data || [];
   const totalPages = data?.pagination?.pages || 1;
   const [deleteTale] = useDeleteTaleMutation();
@@ -50,7 +50,7 @@ export default function TalesList() {
     }));
   };
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <Loader loadingText='Loading Tales...' />
     );
