@@ -1,19 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import {
-  useDeleteRawMutation,
-  useGetRawsQuery,
-  useUpdateRawMutation,
-} from "@/app/store/apis/rawApi";
+import { useGetRawsQuery } from '@/app/hooks/queries/useRawQuery';
+import { useDeleteRawMutation, useUpdateRawMutation } from '@/app/hooks/mutations/useRawMutation';
 import SearchBar from "./SearchBar";
-import { AddCircleRounded, RemoveCircleRounded } from "@mui/icons-material"
+import { Add, AddCircleRounded, RemoveCircleRounded } from "@mui/icons-material"
 import { PaginationParams, Raw } from "@/app/types/Raw";
-import { Loader } from "../ui/Loader";
+import { Loader, RawListSkeleton } from "../ui/Loader";
 import dynamic from "next/dynamic";
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton } from '@mui/material';
+import CustomTooltip from '@/app/components/ui/CustomTooltip';
 const Paginator = dynamic(() => import('../ui/Paginator'), { ssr: false });
 const RawDelete = dynamic(() => import('../raw/RawDelete'), { ssr: false });
 const RawItem = dynamic(() => import('../raw/RawItem'), { ssr: false });
@@ -22,9 +20,12 @@ const RawPin = dynamic(() => import('../raw/RawPin'), { ssr: false });
 const RawForm = dynamic(() => import('../raw/RawForm'), { ssr: false });
 
 export default function RawList() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   // Redux - Global state
   const { user, isAuthenticated }: any = useSelector((state: RootState) => state.auth);
-  const isAdmin = isAuthenticated && user?.isAdmin;
+  const isAdmin = mounted && isAuthenticated && user?.isAdmin;
 
   // Local state - Pagination & UI control
   const [searchParams, setSearchParams] = useState<PaginationParams>({
@@ -43,8 +44,8 @@ export default function RawList() {
   const { data, isLoading, error } = useGetRawsQuery(searchParams);
 
   // Mutations
-  const [deleteRaw, { isLoading: isDeleting }] = useDeleteRawMutation();
-  const [updateRaw, { isLoading: isUpdating }] = useUpdateRawMutation();
+  const { mutateAsync: deleteRaw, isPending: isDeleting } = useDeleteRawMutation();
+  const { mutateAsync: updateRaw, isPending: isUpdating } = useUpdateRawMutation();
 
   // Derived data
   const raws = data?.data || [];
@@ -79,7 +80,7 @@ export default function RawList() {
     const rawData = { content, pinned, tags };
 
     try {
-      await updateRaw({ id, rawData }).unwrap();
+      await updateRaw({ id, rawData });
       setEdit(null);
     } catch (err) {
       console.error("Failed to update RAW:", err);
@@ -91,7 +92,7 @@ export default function RawList() {
   const handleDelete = async (id: string) => {
     if (deleteConfirm === id) {
       try {
-        await deleteRaw(id).unwrap();
+        await deleteRaw(id);
         setDeleteConfirm(null);
       } catch (error) {
         console.error("Failed to delete RAW:", error);
@@ -106,7 +107,7 @@ export default function RawList() {
   const handlePin = async (id: string, pinned: boolean, content: string, tags: string[]) => {
     if (pinId === id) {
       try {
-        await updateRaw({ id, rawData: { content, pinned, tags } }).unwrap();
+        await updateRaw({ id, rawData: { content, pinned, tags } });
       } catch (err) {
         console.error("Failed to update RAW:", err);
       }
@@ -148,40 +149,36 @@ export default function RawList() {
     setEdit(null);
   }
 
-
   return (
     <div className="mx-auto w-full">
       <div className="mb-6 flex gap-2 sm:gap-4 items-center">
         <SearchBar placeholder="Search by Content/Tags..." onSearch={handleSearch} />
         {isAdmin && (
-          <Tooltip title="Add Raw">
-            <IconButton
-              onClick={handleAddClick}
-              sx={{
-                color: addRaw ? 'error.main' : 'primary.main',
-                '&:hover': {
-                  color: addRaw ? 'error.dark' : 'primary.dark',
-                },
-                transition: 'transform 0.2s',
-                transform: 'scale(1.0)',
-                '&:active': {
-                  transform: 'scale(0.95)',
-                }
-              }}
-            >
-              {addRaw ? (
-                <RemoveCircleRounded fontSize="large" />
-              ) : (
-                <AddCircleRounded fontSize="large" />
-              )}
-            </IconButton>
-          </Tooltip>
+          <button
+            onClick={handleAddClick}
+            className={`px-5 py-2.5 rounded-xl whitespace-nowrap font-semibold text-sm transition-all duration-300 flex items-center gap-2 shadow-lg ${addRaw
+              ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/30 hover:shadow-red-500/50'
+              : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/30 hover:shadow-blue-600/50'
+              }`}
+          >
+            {addRaw ? (
+              <>
+                <RemoveCircleRounded fontSize="small" />
+                Cancel
+              </>
+            ) : (
+              <>
+                <Add fontSize="small" />
+                Add Raw
+              </>
+            )}
+          </button>
         )}
       </div>
 
       {isAdmin && addRaw && <RawForm identifier="RAW" handleFormClose={() => setAddRaw(false)} />}
 
-      {isLoading ? (<Loader loadingText="Loading Raws..." />)
+      {isLoading ? (<RawListSkeleton count={3} />)
         : error ? (
           <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 p-6 rounded-lg shadow-md transition-colors duration-300">
             Error loading RAWs. Please try again.

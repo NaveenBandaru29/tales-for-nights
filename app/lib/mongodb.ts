@@ -2,10 +2,6 @@ import mongoose, { Mongoose } from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
-
 // 1. Correctly declare the global variable type
 /* eslint-disable no-var */
 declare global {
@@ -35,8 +31,12 @@ async function connectToDatabase(): Promise<Mongoose> {
       bufferCommands: false,
     };
 
+    if (!MONGODB_URI) {
+      throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+    }
+
     // 2. Add non-null assertion to MONGODB_URI
-    cached.promise = mongoose.connect(MONGODB_URI!, opts)
+    cached.promise = mongoose.connect(MONGODB_URI, opts)
       .then((mongooseInstance) => {
         console.log("Successfully connected to database.");
         return mongooseInstance;

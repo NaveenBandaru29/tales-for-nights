@@ -1,5 +1,6 @@
-import { Button, useTheme } from '@mui/material';
 import React from 'react';
+import { motion } from 'framer-motion';
+import { DeleteOutline, Close } from '@mui/icons-material';
 
 interface RawDeleteProps {
     handleDelete: () => void;
@@ -8,47 +9,51 @@ interface RawDeleteProps {
 }
 
 const RawDelete = ({ handleCancel, handleDelete, isDeleting }: RawDeleteProps) => {
-    const theme = useTheme();
-    const isDarkMode = theme.palette.mode === 'dark';
-
     return (
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 rounded-lg shadow-md transition-colors duration-300
-                    bg-gray-100 dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90">
-            <p className="text-center mb-4 font-semibold
-                      text-gray-800 dark:text-gray-200">
-                Are you sure you want to delete this?
-            </p>
-            <div className="flex gap-4 items-center">
-                <Button
-                    onClick={handleDelete}
-                    disabled={isDeleting}
-                    color='error'
-                    variant='contained'
-                    sx={{
-                        '&.Mui-disabled': {
-                            backgroundColor: isDarkMode ? '#444' : '#ccc',
-                            color: isDarkMode ? '#aaa' : '#888',
-                        },
-                    }}
-                >
-                    {isDeleting ? "Deleting..." : "Yes, Delete"}
-                </Button>
-                <Button
-                    onClick={handleCancel}
-                    color='inherit'
-                    variant='contained'
-                    sx={{
-                        backgroundColor: isDarkMode ? '#555' : '#e0e0e0',
-                        color: isDarkMode ? '#fff' : '#333',
-                        '&:hover': {
-                            backgroundColor: isDarkMode ? '#666' : '#d5d5d5',
-                        },
-                    }}
-                >
-                    Cancel
-                </Button>
-            </div>
-        </div>
+        <motion.div 
+            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
+            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            className="absolute inset-0 z-30 flex flex-col items-center justify-center rounded-[2rem] bg-white/70 dark:bg-slate-900/80 transition-all duration-300"
+        >
+            <motion.div 
+                initial={{ scale: 0.9, y: 10, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="flex flex-col items-center"
+            >
+                <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 rounded-full text-red-500 dark:text-red-400">
+                    <DeleteOutline fontSize="large" />
+                </div>
+                <p className="text-center mb-6 font-semibold text-gray-800 dark:text-gray-100 text-lg">
+                    Delete this item?
+                </p>
+                <div className="flex gap-3 items-center">
+                    <button
+                        onClick={handleCancel}
+                        disabled={isDeleting}
+                        className="px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200
+                                   bg-gray-100 hover:bg-gray-200 text-gray-700
+                                   dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-gray-200
+                                   border border-gray-200 dark:border-slate-700
+                                   disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={handleDelete}
+                        disabled={isDeleting}
+                        className="px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200
+                                   bg-red-500 hover:bg-red-600 text-white
+                                   shadow-lg shadow-red-500/30 hover:shadow-red-500/50
+                                   disabled:opacity-50 disabled:cursor-not-allowed
+                                   flex items-center gap-2"
+                    >
+                        {isDeleting ? "Deleting..." : "Yes, Delete"}
+                    </button>
+                </div>
+            </motion.div>
+        </motion.div>
     );
 };
 
