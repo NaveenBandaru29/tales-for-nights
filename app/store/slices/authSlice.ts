@@ -1,6 +1,5 @@
 // store/slices/authSlice.ts
 import { createSlice/* , PayloadAction */ } from '@reduxjs/toolkit';
-import { authApi } from '../apis/authApi';
 
 interface User {
   id: string;
@@ -73,30 +72,6 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(
-        authApi.endpoints.login.matchFulfilled,
-        (state, { payload }) => {
-          state.user = payload.user;
-          state.token = payload.token;
-          state.isAuthenticated = true;
-          state.error = null;
-          
-          // Save to localStorage
-          if (typeof window !== 'undefined') {
-            localStorage.setItem('token', payload.token);
-            localStorage.setItem('user', JSON.stringify(payload.user));
-          }
-        }
-      )
-      .addMatcher(
-        authApi.endpoints.login.matchRejected,
-        (state, { error }) => {
-          state.error = error.message || 'Login failed';
-        }
-      );
   },
 });
 

@@ -1,23 +1,27 @@
 'use client'
 import { RootState } from '@/app/store';
 import dynamic from 'next/dynamic';
-import { useDeleteCharmMutation, useGetCharmsQuery, useUpdateCharmMutation } from '@/app/store/apis/charmApi';
+import { useDeleteCharmMutation, useUpdateCharmMutation } from '@/app/hooks/mutations/useCharmMutation';
+import { useGetCharmsQuery } from '@/app/hooks/queries/useCharmQuery';
 import { Charm, PaginationParams } from '@/app/types/Charm';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { Loader } from '../ui/Loader';
+import { Loader, RawListSkeleton } from '../ui/Loader';
 const Paginator = dynamic(() => import('../ui/Paginator'), { ssr: false });
 const RawDelete = dynamic(() => import('../raw/RawDelete'), { ssr: false });
 const RawItem = dynamic(() => import('../raw/RawItem'), { ssr: false });
 const RawEditForm = dynamic(() => import('../raw/RawEditForm'), { ssr: false });
 const RawPin = dynamic(() => import('../raw/RawPin'), { ssr: false });
 const RawForm = dynamic(() => import('../raw/RawForm'), { ssr: false });
-import { Button } from '@mui/material';
+import { Add, Close } from '@mui/icons-material';
 
 const CharmList = () => {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+
     // Redux
     const { user, isAuthenticated }: any = useSelector((state: RootState) => state.auth);
-    const isAdmin = isAuthenticated && user?.isAdmin;
+    const isAdmin = mounted && isAuthenticated && user?.isAdmin;
 
     // Pagination State
     const [searchParams, setSearchParams] = useState<PaginationParams>({
@@ -38,8 +42,8 @@ const CharmList = () => {
     const totalPages = data?.pagination?.pages || 1;
 
     // Mutations
-    const [deleteCharm, { isLoading: isDeleting }] = useDeleteCharmMutation();
-    const [updateCharm, { isLoading: isUpdating }] = useUpdateCharmMutation();
+    const { mutateAsync: deleteCharm, isPending: isDeleting } = useDeleteCharmMutation();
+    const { mutateAsync: updateCharm, isPending: isUpdating } = useUpdateCharmMutation();
 
 
     // Handlers
@@ -61,7 +65,7 @@ const CharmList = () => {
         const charmData = { content, pinned, tags };
 
         try {
-            await updateCharm({ id, charmData }).unwrap();
+            await updateCharm({ id, charmData });
             setEdit(null);
         } catch (err) {
             console.error("Failed to update Charm:", err);
@@ -73,7 +77,7 @@ const CharmList = () => {
     const handleDelete = async (id: string) => {
         if (deleteConfirm === id) {
             try {
-                await deleteCharm(id).unwrap();
+                await deleteCharm(id);
                 setDeleteConfirm(null);
             } catch (error) {
                 console.error("Failed to delete Charm:", error);
@@ -88,7 +92,7 @@ const CharmList = () => {
     const handlePin = async (id: string, pinned: boolean, content: string, tags: string[]) => {
         if (pinId === id) {
             try {
-                await updateCharm({ id, charmData: { content, pinned, tags } }).unwrap();
+                await updateCharm({ id, charmData: { content, pinned, tags } });
             } catch (err) {
                 console.error("Failed to update Charm:", err);
             }
@@ -137,15 +141,32 @@ const CharmList = () => {
         <div className="mx-auto w-full">
             <div className="mb-6 flex gap-2 sm:gap-4">
                 {isAdmin && (
-                    <Button onClick={handleAddClick} color={addCharm ? "error" : "primary"} variant="contained">
-                        {addCharm ? "Cancel" : "Add Charm"}
-                    </Button>
+                    <button
+                        onClick={handleAddClick}
+                        className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center gap-2 shadow-lg ${
+                            addCharm 
+                            ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/30 hover:shadow-red-500/50' 
+                            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/30 hover:shadow-blue-600/50'
+                        }`}
+                    >
+                        {addCharm ? (
+                            <>
+                                <Close fontSize="small" />
+                                Cancel
+                            </>
+                        ) : (
+                            <>
+                                <Add fontSize="small" />
+                                Add Charm
+                            </>
+                        )}
+                    </button>
                 )}
             </div>
 
             {isAdmin && addCharm && <RawForm identifier="CHARM" handleFormClose={() => setAddCharm(false)} />}
 
-            {(isLoading || isFetching) ? (<Loader loadingText="Loading Charms..." />)
+            {(isLoading || isFetching) ? (<RawListSkeleton count={3} />)
                 : error ? (
                     <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 p-6 rounded-lg shadow-md transition-colors duration-300">
                         Error loading Charms. Please try again.

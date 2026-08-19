@@ -34,15 +34,15 @@ export default function SearchBar({ onSearch, placeholder }: SearchBarProps) {
   }, [debouncedQuery]);
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full group flex-grow">
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder={placeholder || "Search..."}
-        className="w-full py-3 pl-10 pr-4 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-300 shadow-sm"
+        className="w-full py-3 pl-12 pr-5 rounded-full border border-white/60 dark:border-slate-700/50 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50 transition-all duration-300 shadow-sm hover:shadow-md dark:shadow-none hover:bg-white/90 dark:hover:bg-slate-900/60"
       />
-      <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-500 dark:text-gray-400">
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-gray-400 dark:text-gray-500 pointer-events-none transition-colors duration-300 group-focus-within:text-blue-500">
         <SearchIcon className="text-xl" />
       </div>
     </div>

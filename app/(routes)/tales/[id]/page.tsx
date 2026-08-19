@@ -13,12 +13,12 @@ export default function TaleDetailPage() {
   const id = params.id as string;
 
   return (
-    <div className="px-2 sm:px-4 py-8">
-      <div className="mb-6">
+    <div className="px-2 sm:px-4 py-4">
+      {/* <div className="mb-6">
         <Link href="/" className="text-blue-600 hover:underline">
           ← Back to all tales
         </Link>
-      </div>
+      </div> */}
 
       <TaleDetail id={id} />
     </div>

@@ -7,17 +7,16 @@
 import { useEffect, useState } from "react"; // React hooks for managing state and side effects
 import dynamic from "next/dynamic";
 import AuthGuard from "../components/auth/AuthGuard"; // Component that checks if user is authenticated and authorized as an admin
-import {
-  useGetTalesQuery, // API hook for fetching tales data
-  useDeleteTaleMutation, // API hook for deleting a tale
-} from "../store/apis/talesApi";
-import { useDeleteRawMutation, useGetRawsQuery } from "../store/apis/rawApi"; // API hooks for fetching and deleting raw items
+import { useGetAllTalesQuery } from "../hooks/queries/useTalesQuery";
+import { useDeleteTaleMutation } from "../hooks/mutations/useTalesMutation";
+import { useGetRawsQuery } from "../hooks/queries/useRawQuery";
+import { useDeleteRawMutation } from "../hooks/mutations/useRawMutation";
 const DeleteModal = dynamic(() => import("../components/ui/DeleteModal")); // Modal component to confirm deletion
 const AdminManageSection = dynamic(() => import("../components/admin/AdminManageSection")); // Section component to manage tales and raws
 
 export default function AdminPage() {
   // Fetch tales data using the API query hook
-  const { data: tales, isLoading, isError, refetch } = useGetTalesQuery({ limit: 2, page: 1 });
+  const { data: tales, isLoading, isError, refetch } = useGetAllTalesQuery({ limit: 2, page: 1 });
 
   // Fetch raw data using the API query hook
   const {
@@ -28,8 +27,8 @@ export default function AdminPage() {
   } = useGetRawsQuery({ limit: 2, page: 1 });
 
   // API mutation hooks for deleting a tale and raw
-  const [deleteTale, { isLoading: isDeleting }] = useDeleteTaleMutation();
-  const [deleteRaw, { isLoading: isRawDeleing }] = useDeleteRawMutation();
+  const { mutateAsync: deleteTale, isPending: isDeleting } = useDeleteTaleMutation();
+  const { mutateAsync: deleteRaw, isPending: isRawDeleing } = useDeleteRawMutation();
 
   // State variables for managing the selected tale, raw, and modal visibility
   const [selectedTale, setSelectedTale] = useState<string | null>(null); // Stores the ID of the selected tale to be deleted
@@ -47,7 +46,7 @@ export default function AdminPage() {
   const handleTaleDelete = async () => {
     if (selectedTale) {
       try {
-        await deleteTale(selectedTale).unwrap(); // Call the deleteTale mutation
+        await deleteTale(selectedTale); // Call the deleteTale mutation
         setShowDeleteTaleModal(false); // Close the deletion modal
         setSelectedTale(null); // Clear the selected tale
       } catch (error) {
@@ -60,7 +59,7 @@ export default function AdminPage() {
   const handleRawDelete = async () => {
     if (selectedRaw) {
       try {
-        await deleteRaw(selectedRaw).unwrap(); // Call the deleteRaw mutation
+        await deleteRaw(selectedRaw); // Call the deleteRaw mutation
         setShowDeleteRawModal(false); // Close the deletion modal
         setSelectedRaw(null); // Clear the selected raw
       } catch (error) {

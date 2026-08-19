@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig, Method } from 'axios';
 interface APIRequestOptions<T = any> {
     url: string;
     method: Method;
-    token?: string | null;
+
     data?: T; // For POST/PUT
     params?: Record<string, any>; // For GET queries
     headers?: Record<string, string>; // Custom headers
@@ -13,12 +13,17 @@ interface APIRequestOptions<T = any> {
 export async function apiRequest<TResponse = any, TData = any>({
     url,
     method,
-    token,
     data,
     params,
     headers = {},
 }: APIRequestOptions<TData>): Promise<TResponse> {
     const apiUrl = '/api' + url
+    
+    let authToken = null;
+    if (typeof window !== 'undefined') {
+        authToken = localStorage.getItem('token');
+    }
+
     try {
         const config: AxiosRequestConfig = {
             url: apiUrl,
@@ -27,7 +32,7 @@ export async function apiRequest<TResponse = any, TData = any>({
             data,
             headers: {
                 ...headers,
-                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
                 'Content-Type': 'application/json',
             },
         };

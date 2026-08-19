@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between text-center sm:text-left">
         {/* Copyright Section */}
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          &copy; {new Date().getFullYear()} Tales For Nights, All Rights Reserved.
+          &copy; 2025 Tales For Nights, All Rights Reserved.
         </p>
 
         {/* Optional: Add links for a more professional feel */}

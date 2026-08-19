@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
 import { PlayCircleRounded, PauseCircleRounded } from "@mui/icons-material";
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton } from '@mui/material';
+import CustomTooltip from '@/app/components/ui/CustomTooltip';
 
 interface AudioPlayerProps {
   source: string;
@@ -15,7 +16,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ source }) => {
     if (!audioRef.current) {
       audioRef.current = new Audio(source);
       audioRef.current.loop = true;
-      audioRef.current.muted = true; // Add this line
+      
       audioRef.current.play().catch(() => { });
     }
 
@@ -40,6 +41,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ source }) => {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
+        audioRef.current.muted = false;
         audioRef.current.play().catch(error => {
           console.log('User interaction required to play audio:', error);
           setIsPlaying(false);
@@ -50,7 +52,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ source }) => {
 
   return (
     <div className="flex items-center gap-2 transition-colors duration-500">
-      <Tooltip title="Theme music">
+      <CustomTooltip title="Theme music">
         <IconButton
           onClick={togglePlayPause}
           className="transition-transform duration-300 transform hover:scale-105 active:scale-95"
@@ -61,7 +63,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ source }) => {
             <PlayCircleRounded className='text-green-500' fontSize='large' />
           )}
         </IconButton>
-      </Tooltip>
+      </CustomTooltip>
     </div>
   );
 };

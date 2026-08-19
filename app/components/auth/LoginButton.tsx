@@ -6,7 +6,8 @@
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import { useRouter } from 'next/navigation';
-import { Button, IconButton, Tooltip } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
+import CustomTooltip from '@/app/components/ui/CustomTooltip';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 
@@ -43,11 +44,11 @@ export default function LogoutButton() {
 		// </Button>
 		<>
 			<div className='hidden sm:flex'>
-				<Tooltip title="Logout">
+				<CustomTooltip title="Logout">
 					<IconButton onClick={handleLogout} color='error'>
 						<LogoutIcon />
 					</IconButton>
-				</Tooltip>
+				</CustomTooltip>
 			</div>
 			<div className="flex sm:hidden w-full">
 				<Button

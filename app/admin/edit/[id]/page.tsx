@@ -16,14 +16,14 @@ export default function EditTalePage() {
 
   return (
     <AuthGuard requireAdmin>
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
+      <div className="container mx-auto p-4">
+        {/* <div className="mb-6">
           <Link href="/admin" className="text-blue-600 hover:underline">
             ← Back to dashboard
           </Link>
-        </div>
-        
-        <TaleForm 
+        </div> */}
+
+        <TaleForm
           id={id}
           isEdit
         />

@@ -1,12 +1,12 @@
 // components/raw/RawForm.tsx
 'use client';
 import dynamic from 'next/dynamic';
-import { useCreateRawMutation } from '@/app/store/apis/rawApi';
+import { useCreateRawMutation } from '@/app/hooks/mutations/useRawMutation';
 import { useState } from 'react';
 import { MultiValue } from "react-select"
 import SelectField from '../ui/SelectField';
 import { Loader } from '../ui/Loader';
-import { useCreateCharmMutation } from '@/app/store/apis/charmApi';
+import { useCreateCharmMutation } from '@/app/hooks/mutations/useCharmMutation';
 import { Button } from '@mui/material';
 import { useTheme } from '@/app/context/ThemeContext';
 const CustomEditor = dynamic(() => import('../common/CustomEditor'), { ssr: false, loading: () => <Loader loadingText='Loading Editor...' /> })
@@ -39,8 +39,8 @@ export interface RawFormPorps {
 export default function RawForm({ handleFormClose, identifier }: RawFormPorps) {
 	const [content, setContent] = useState('');
 	const [selectedTags, setSelectedTags] = useState<MultiValue<Tag>>([])
-	const [createRaw, { isLoading }] = useCreateRawMutation();
-	const [createCharm, { isLoading: isAdding }] = useCreateCharmMutation();
+	const { mutateAsync: createRaw, isPending: isLoading } = useCreateRawMutation();
+	const { mutateAsync: createCharm, isPending: isAdding } = useCreateCharmMutation();
 	const { isDarkMode } = useTheme()
 	const handleTagsChange = (newValues: MultiValue<Tag>) => {
 		setSelectedTags(newValues)
@@ -57,10 +57,10 @@ export default function RawForm({ handleFormClose, identifier }: RawFormPorps) {
 		}
 		try {
 			if (identifier === "RAW") {
-				await createRaw(data).unwrap();
+				await createRaw(data);
 			}
 			else {
-				await createCharm(data).unwrap()
+				await createCharm(data);
 			}
 			setContent(''); // Clear form after successful submission
 			setSelectedTags([])
@@ -95,26 +95,27 @@ export default function RawForm({ handleFormClose, identifier }: RawFormPorps) {
 			</div>
 
 			<div className="flex gap-3">
-				<Button
-					type='submit'
+				<button
+					type="submit"
 					disabled={isLoading || isAdding || !content.trim()}
-					variant="contained"
-					sx={{
-						'&.Mui-disabled': {
-							backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)',
-							color: isDarkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
-						},
-					}}
+					className="px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-200
+                               bg-blue-600 hover:bg-blue-700 text-white
+                               shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50
+                               disabled:opacity-50 disabled:cursor-not-allowed
+                               flex items-center gap-2"
 				>
 					{(isLoading || isAdding) ? 'Adding...' : 'Add'}
-				</Button>
-				<Button
+				</button>
+				<button
+					type="button"
 					onClick={handleFormClose}
-					color="error"
-					variant="contained"
+					className="px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-200
+                               bg-gray-100 hover:bg-gray-200 text-gray-700
+                               dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-gray-200
+                               border border-gray-200 dark:border-slate-700"
 				>
 					Cancel
-				</Button>
+				</button>
 			</div>
 		</form>
 	);
