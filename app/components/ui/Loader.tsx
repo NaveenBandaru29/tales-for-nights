@@ -1,5 +1,25 @@
-import { Backdrop, CircularProgress, Skeleton } from '@mui/material';
+import { Backdrop, CircularProgress, Skeleton as MuiSkeleton, SkeletonProps } from '@mui/material';
 import React from 'react';
+
+// Custom Skeleton with enhanced visibility for glassmorphic backgrounds
+const Skeleton = (props: SkeletonProps) => (
+  <MuiSkeleton 
+    {...props} 
+    sx={{ 
+      bgcolor: 'rgba(148, 163, 184, 0.25)', // Higher contrast base for light mode
+      '&::after': {
+        background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent)',
+      },
+      '.dark &': {
+        bgcolor: 'rgba(51, 65, 85, 0.6)', // Higher contrast base for dark mode
+        '&::after': {
+          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent)',
+        }
+      },
+      ...props.sx 
+    }} 
+  />
+);
 
 export const Loader = ({ loadingText }: { loadingText?: string }) => {
   return (
@@ -37,7 +57,7 @@ export const TaleCardSkeleton = () => (
 );
 
 export const TalesListSkeleton = ({ count = 6 }: { count?: number }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {Array.from({ length: count }).map((_, index) => (
       <TaleCardSkeleton key={index} />
     ))}
@@ -98,7 +118,7 @@ export const LazyLoader: React.FC = () => {
 };
 
 export const RawItemSkeleton = () => (
-  <div className="relative w-full bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[2rem] shadow-xl shadow-blue-900/5 dark:shadow-none border border-white/60 dark:border-slate-700/50 p-6 sm:p-8 flex flex-col gap-4 overflow-hidden mb-4">
+  <div className="relative w-full bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-[2rem] shadow-xl shadow-blue-900/5 dark:shadow-none border border-white/60 dark:border-slate-700/50 p-6 sm:p-8 flex flex-col gap-4 overflow-hidden">
     <div className="absolute inset-0 rounded-[2rem] border border-white/20 dark:border-white/5 pointer-events-none z-0"></div>
     <div className="relative z-10 space-y-3">
       <Skeleton animation="wave" variant="text" sx={{ fontSize: '1.2rem', width: '90%', borderRadius: '6px' }} />
