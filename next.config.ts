@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     JWT_SECRET: process.env.JWT_SECRET,
   },
   // Allow local network IP for development
-  allowedDevOrigins: ['192.168.1.42'],
+  allowedDevOrigins: [''],
 };
 
 export default nextConfig;
