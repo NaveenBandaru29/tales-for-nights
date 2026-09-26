@@ -1,0 +1,21 @@
+# Robots.txt for Tales For Nights
+# Allow search engines to crawl public content
+# Block crawling of admin, auth, and API endpoints
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /login
+Disallow: /api/
+Allow: /api/tales
+Allow: /api/charm
+Allow: /api/raw
+Disallow: /_next/
+Disallow: /favicon.ico
+
+# Sitemap location
+Sitemap: https://tales-for-nights.vercel.app/sitemap.xml
+
+# Crawl delay (optional - helps with server load)
+# Crawl-delay: 1
