@@ -1,6 +1,19 @@
 import HeaderTitle from '@/app/components/common/HeaderTitle';
+import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+
 const RawList = dynamic(() => import('@/app/components/raw/RawList'))
+
+export const metadata: Metadata = {
+  title: 'Venom - Unfiltered Emotions & Bold Outbursts',
+  description: 'Unfiltered emotions, bitter truths, and sharp outbursts. Raw thoughts that resonate with the soul.',
+  keywords: ['venom', 'raw emotions', 'unfiltered', 'outbursts', 'emotions', 'bitter truths'],
+  openGraph: {
+    title: 'Venom - Unfiltered Emotions & Bold Outbursts',
+    description: 'Unfiltered emotions, bitter truths, and sharp outbursts.',
+    type: 'website',
+  },
+};
 
 export default function RawPage() {
   return (

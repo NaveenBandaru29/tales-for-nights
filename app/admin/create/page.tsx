@@ -1,10 +1,18 @@
 
 // app/admin/create/page.tsx
 
+import { Metadata } from 'next';
 import TaleForm from '../../components/tales/TaleForm';
 // import { useCreateTaleMutation } from '../../store/apis/talesApi';
 import Link from 'next/link';
 import AuthGuard from '@/app/components/auth/AuthGuard';
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function CreateTalePage() {
   // const [createTale, { isLoading, error }] = useCreateTaleMutation();

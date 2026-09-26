@@ -1,6 +1,18 @@
 import CharmList from '@/app/components/charm/CharmList'
 import HeaderTitle from '@/app/components/common/HeaderTitle'
+import { Metadata } from 'next'
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: 'Charm - Playful Words & Sweet Nothings',
+  description: 'Playful words and sweet nothings — little lines to win her heart. Discover charming, romantic phrases.',
+  keywords: ['charm', 'romantic', 'pickup lines', 'flirt', 'sweet nothings', 'love lines'],
+  openGraph: {
+    title: 'Charm - Playful Words & Sweet Nothings',
+    description: 'Playful words and sweet nothings — little lines to win her heart.',
+    type: 'website',
+  },
+};
 
 const CharmPage = () => {
   return (

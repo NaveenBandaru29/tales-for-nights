@@ -1,5 +1,15 @@
 import NavTags from '@/app/components/common/Navtags/NavTags'
+import { Metadata } from 'next'
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: 'Lyrics - Original Poetry & Song Verses',
+  description: 'Explore original lyrics and poetic verses. Coming soon — a new dimension of Tales For Nights.',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const LyricsPage = () => {
   return (

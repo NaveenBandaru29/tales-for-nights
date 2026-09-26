@@ -1,9 +1,21 @@
 // app/page.tsx
 import dynamic from 'next/dynamic';
 import { Fragment } from 'react';
+import { Metadata } from 'next';
 import HeaderTitle from './components/common/HeaderTitle';
 
 const TalesList = dynamic(() => import('./components/tales/TalesList'));
+
+export const metadata: Metadata = {
+  title: 'Scars - Stories of Love, Loss & Heartache',
+  description: 'Stories of love, loss, and the pain that never really fades. Explore emotional tales that resonate with the heart.',
+  keywords: ['stories', 'tales', 'scars', 'emotional stories', 'love stories', 'heartache'],
+  openGraph: {
+    title: 'Scars - Stories of Love, Loss & Heartache',
+    description: 'Stories of love, loss, and the pain that never really fades.',
+    type: 'website',
+  },
+};
 
 export default function HomePage() {
   return (
