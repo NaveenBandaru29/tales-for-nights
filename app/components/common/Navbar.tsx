@@ -113,7 +113,7 @@ export default function Navbar() {
 				<nav className="flex justify-between items-center h-[64px] sm:h-[72px] px-6 sm:px-10 lg:px-14">
 
 					{/* Logo */}
-					<Link href="/" className="flex items-center space-x-3 group">
+					<Link href="/" className="flex items-center space-x-3 group cursor-pointer">
 						<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 							<Image
 								src={"/TFN_LOGO.png"}

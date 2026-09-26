@@ -24,9 +24,18 @@ async function getTaleData(id: string) {
       return null;
     }
 
-    const data = await response.json();
-    // Handle both array and object responses
-    const tale = Array.isArray(data) ? data[1] : data;
+    const apiResponse = await response.json();
+
+    // Handle API response format: { success: true, data: [nextTale, tale, prevTale] }
+    if (!apiResponse.success || !apiResponse.data) {
+      console.warn('API response format unexpected:', apiResponse);
+      return null;
+    }
+
+    const data = apiResponse.data;
+    // data is an array: [nextTale, tale, prevTale]
+    // The actual tale is at index 1
+    const tale = Array.isArray(data) && data.length > 1 ? data[1] : null;
     return tale;
   } catch (error) {
     console.warn('Error fetching tale for metadata:', error);
@@ -38,7 +47,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const id = params.id;
+  const { id } = await params;
   const tale = await getTaleData(id);
 
   // If tale not found, return minimal metadata
@@ -53,14 +62,15 @@ export async function generateMetadata(
   }
 
   // Create metadata from tale data
-  const title = `${tale.title} | Tales For Nights`;
   const description = tale.description || tale.content.substring(0, 160);
+  const title = `${tale.title} | ${description}`;
   const keywords = tale.tags?.join(', ') || '';
   const publishedTime = new Date(tale.createdAt).toISOString();
   const modifiedTime = new Date(tale.updatedAt || tale.createdAt).toISOString();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tales-for-nights.vercel.app';
   const canonicalUrl = `${siteUrl}/tales/${id}`;
 
+  
   return {
     title,
     description,
@@ -97,8 +107,8 @@ export async function generateMetadata(
   };
 }
 
-export default function TaleDetailPage({ params }: Props) {
-  const id = params.id as string;
+export default async function TaleDetailPage({ params }: Props) {
+  const { id } = await params;
 
   return (
     <div className="px-2 sm:px-4 py-4">

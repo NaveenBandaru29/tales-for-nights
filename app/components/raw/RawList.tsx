@@ -41,7 +41,7 @@ export default function RawList() {
   const [edit, setEdit] = useState<string | null>(null);
 
   // Data fetching
-  const { data, isLoading, error } = useGetRawsQuery(searchParams);
+  const { data, isLoading, isFetching, isRefetching, error } = useGetRawsQuery(searchParams);
 
   // Mutations
   const { mutateAsync: deleteRaw, isPending: isDeleting } = useDeleteRawMutation();
@@ -156,7 +156,7 @@ export default function RawList() {
         {isAdmin && (
           <button
             onClick={handleAddClick}
-            className={`px-5 py-2.5 rounded-xl whitespace-nowrap font-semibold text-sm transition-all duration-300 flex items-center gap-2 shadow-lg ${addRaw
+            className={`px-5 py-2.5 rounded-xl whitespace-nowrap font-semibold text-sm transition-all duration-300 flex items-center gap-2 shadow-lg cursor-pointer ${addRaw
               ? 'bg-red-500 hover:bg-red-600 text-white shadow-red-500/30 hover:shadow-red-500/50'
               : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/30 hover:shadow-blue-600/50'
               }`}
@@ -178,7 +178,7 @@ export default function RawList() {
 
       {isAdmin && addRaw && <RawForm identifier="RAW" handleFormClose={() => setAddRaw(false)} />}
 
-      {isLoading ? (<RawListSkeleton count={3} />)
+      {(isLoading || isFetching || isRefetching) ? (<RawListSkeleton count={3} />)
         : error ? (
           <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 p-6 rounded-lg shadow-md transition-colors duration-300">
             Error loading RAWs. Please try again.

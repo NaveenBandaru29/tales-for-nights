@@ -176,7 +176,7 @@ export default function TaleForm({ id, isEdit = false }: TaleFormProps) {
             <button
               type="button"
               onClick={() => router.back()}
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white/40 dark:bg-slate-800/40 hover:bg-white/80 dark:hover:bg-slate-800/80 border border-gray-200/60 dark:border-gray-700/60 rounded-full shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group/btn"
+              className="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white/40 dark:bg-slate-800/40 hover:bg-white/80 dark:hover:bg-slate-800/80 border border-gray-200/60 dark:border-gray-700/60 rounded-full shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group/btn"
             >
               <span className="transform transition-transform duration-300 group-hover/btn:-translate-x-1.5 opacity-80 group-hover/btn:opacity-100 group-hover/btn:text-red-500">
                 <ArrowBackRounded sx={{ height: '18px', width: '18px' }} />

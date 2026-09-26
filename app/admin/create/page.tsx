@@ -29,13 +29,7 @@ export default function CreateTalePage() {
 
   return (
     <AuthGuard requireAdmin>
-      <div className="container mx-auto p-4">
-        <div className="mb-6">
-          <Link href="/admin" className="text-blue-600 hover:underline">
-            ← Back to dashboard
-          </Link>
-        </div>
-
+      <div className="container mx-auto">
         {/* <h1 className="text-3xl font-bold mb-8">Create New Tale</h1> */}
 
         {/* {error && (

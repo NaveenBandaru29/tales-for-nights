@@ -20,7 +20,7 @@ interface TaleDetailProps {
 }
 
 export default function TaleDetail({ id }: TaleDetailProps) {
-  const { data, isLoading, error } = useGetTaleByIdQuery(id);
+  const { data, isLoading, isFetching, isRefetching, error } = useGetTaleByIdQuery(id);
   const { user } = useSelector((state: RootState) => state.auth);
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -34,7 +34,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
   const prevTale = isNewFormat ? data[0] : tale?.prevTale;
   const nextTale = isNewFormat ? data[2] : tale?.nextTale;
 
-  if (!mounted || isLoading || !(data?.length)) {
+  if (!mounted || isLoading || isFetching || isRefetching || !(data?.length)) {
     return <TaleDetailSkeleton />;
   }
 
@@ -203,7 +203,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
           <div className="mb-10 justify-start">
             <Link
               href="/"
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white/40 dark:bg-slate-800/40 hover:bg-white/80 dark:hover:bg-slate-800/80 border border-gray-200/60 dark:border-gray-700/60 rounded-full shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white/40 dark:bg-slate-800/40 hover:bg-white/80 dark:hover:bg-slate-800/80 border border-gray-200/60 dark:border-gray-700/60 rounded-full shadow-sm hover:shadow-md transition-all duration-300 backdrop-blur-md group cursor-pointer"
             >
               <span className="transform transition-transform duration-300 group-hover:-translate-x-1.5 opacity-80 group-hover:opacity-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
                 <ArrowBackRounded sx={{ height: '18px', width: '18px' }} />
@@ -283,7 +283,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigateToTaleById(prevTale._id)}
-                className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl sm:rounded-[1.5rem] text-left bg-white/40 hover:bg-white/80 dark:bg-slate-800/30 dark:hover:bg-slate-800/60 border border-white/60 dark:border-slate-700/50 transition-colors duration-300 shadow-sm hover:shadow-lg backdrop-blur-md group w-full"
+                className="cursor-pointer flex items-center gap-4 p-4 sm:p-5 rounded-2xl sm:rounded-[1.5rem] text-left bg-white/40 hover:bg-white/80 dark:bg-slate-800/30 dark:hover:bg-slate-800/60 border border-white/60 dark:border-slate-700/50 transition-colors duration-300 shadow-sm hover:shadow-lg backdrop-blur-md group w-full"
               >
                 <div className="p-2 rounded-xl bg-white/80 dark:bg-slate-700/80 border border-gray-200/60 dark:border-gray-600 group-hover:border-blue-300 dark:group-hover:border-blue-600 transition-colors shadow-xs shrink-0">
                   <ChevronLeft className="text-gray-600 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
@@ -305,7 +305,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigateToTaleById(nextTale._id)}
-                className="flex items-center justify-end gap-4 p-4 sm:p-5 rounded-2xl sm:rounded-[1.5rem] text-right bg-white/40 hover:bg-white/80 dark:bg-slate-800/30 dark:hover:bg-slate-800/60 border border-white/60 dark:border-slate-700/50 transition-colors duration-300 shadow-sm hover:shadow-lg backdrop-blur-md group w-full"
+                className="cursor-pointer flex items-center justify-end gap-4 p-4 sm:p-5 rounded-2xl sm:rounded-[1.5rem] text-right bg-white/40 hover:bg-white/80 dark:bg-slate-800/30 dark:hover:bg-slate-800/60 border border-white/60 dark:border-slate-700/50 transition-colors duration-300 shadow-sm hover:shadow-lg backdrop-blur-md group w-full"
               >
                 <div className="flex flex-col min-w-0">
                   <span className="text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 font-bold mb-1">Next</span>
@@ -325,7 +325,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
         <footer className="relative z-10 px-6 sm:px-10 py-6 bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl flex flex-col sm:flex-row justify-between items-center gap-5 border-t border-white/60 dark:border-slate-700/50 transition-colors">
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200 bg-white/50 dark:bg-slate-800/50 hover:bg-white/90 dark:hover:bg-slate-700/80 border border-white/60 dark:border-slate-600/50 rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_4px_15px_rgba(0,0,0,0.05)] dark:shadow-none transition-all duration-300 backdrop-blur-md group w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-2 px-7 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200 bg-white/50 dark:bg-slate-800/50 hover:bg-white/90 dark:hover:bg-slate-700/80 border border-white/60 dark:border-slate-600/50 rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_4px_15px_rgba(0,0,0,0.05)] dark:shadow-none transition-all duration-300 backdrop-blur-md group w-full sm:w-auto cursor-pointer"
           >
             <span className="transform transition-transform duration-300 group-hover:-translate-x-1.5 opacity-80 group-hover:opacity-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
               <ArrowBackRounded sx={{ height: '20px', width: '20px' }} />
@@ -336,7 +336,7 @@ export default function TaleDetail({ id }: TaleDetailProps) {
           {isAdmin && (
             <Link
               href={`/admin/edit/${tale._id}`}
-              className="relative inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-bold tracking-wide rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] active:scale-[0.98] w-full sm:w-auto group overflow-hidden"
+              className="relative inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-bold tracking-wide rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] active:scale-[0.98] w-full sm:w-auto group overflow-hidden cursor-pointer"
             >
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
               <EditOutlined fontSize="small" className="opacity-90 group-hover:opacity-100 transition-opacity relative z-10" />

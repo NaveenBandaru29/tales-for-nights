@@ -39,7 +39,7 @@ export default function TaleCard({ tale, onEdit, onDelete }: TaleCardProps) {
 
       <Link
         href={`/tales/${tale._id}`}
-        className="p-6 sm:p-7 flex flex-col flex-grow text-left focus:outline-none"
+        className="p-6 sm:p-7 flex flex-col flex-grow text-left focus:outline-none cursor-pointer"
       >
         <div className="flex justify-between items-start gap-3 mb-3">
           <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2 leading-snug">
