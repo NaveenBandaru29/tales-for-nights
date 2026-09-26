@@ -11,13 +11,13 @@ const Footer = () => {
 
         {/* Optional: Add links for a more professional feel */}
         {/* <div className="flex flex-wrap justify-center sm:justify-end gap-x-4 gap-y-2 mt-4 sm:mt-0">
-          <Link href="/about" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors duration-200">
+          <Link href="/about" className="cursor-pointer text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors duration-200">
             About Us
           </Link>
-          <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors duration-200">
+          <Link href="/privacy" className="cursor-pointer text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors duration-200">
             Privacy Policy
           </Link>
-          <Link href="/contact" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors duration-200">
+          <Link href="/contact" className="cursor-pointer text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors duration-200">
             Contact
           </Link>
         </div> */}

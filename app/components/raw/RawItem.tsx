@@ -84,8 +84,9 @@ export default function RawItem({ raw, isAdmin, onDelete, onEdit, onPin }: RawIt
                   color: '#3b82f6',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                   border: '1px solid rgba(255, 255, 255, 0.5)',
-                  '&:hover': { 
-                    bgcolor: '#ffffff', 
+                  cursor: 'pointer',
+                  '&:hover': {
+                    bgcolor: '#ffffff',
                     transform: 'scale(1.1) translateY(-1px)',
                     boxShadow: '0 6px 16px rgba(59, 130, 246, 0.2)'
                   },
@@ -95,7 +96,7 @@ export default function RawItem({ raw, isAdmin, onDelete, onEdit, onPin }: RawIt
                     color: '#60a5fa',
                     borderColor: 'rgba(51, 65, 85, 0.5)',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                    '&:hover': { 
+                    '&:hover': {
                       bgcolor: 'rgba(30, 41, 59, 1)',
                       boxShadow: '0 6px 16px rgba(96, 165, 250, 0.2)'
                     }
@@ -117,8 +118,9 @@ export default function RawItem({ raw, isAdmin, onDelete, onEdit, onPin }: RawIt
                   color: '#ef4444',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                   border: '1px solid rgba(255, 255, 255, 0.5)',
-                  '&:hover': { 
-                    bgcolor: '#ffffff', 
+                  cursor: 'pointer',
+                  '&:hover': {
+                    bgcolor: '#ffffff',
                     transform: 'scale(1.1) translateY(-1px)',
                     boxShadow: '0 6px 16px rgba(239, 68, 68, 0.2)'
                   },
@@ -128,7 +130,7 @@ export default function RawItem({ raw, isAdmin, onDelete, onEdit, onPin }: RawIt
                     color: '#f87171',
                     borderColor: 'rgba(51, 65, 85, 0.5)',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                    '&:hover': { 
+                    '&:hover': {
                       bgcolor: 'rgba(30, 41, 59, 1)',
                       boxShadow: '0 6px 16px rgba(248, 113, 113, 0.2)'
                     }
@@ -150,8 +152,9 @@ export default function RawItem({ raw, isAdmin, onDelete, onEdit, onPin }: RawIt
                   color: '#8b5cf6',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                   border: '1px solid rgba(255, 255, 255, 0.5)',
-                  '&:hover': { 
-                    bgcolor: '#ffffff', 
+                  cursor: 'pointer',
+                  '&:hover': {
+                    bgcolor: '#ffffff',
                     transform: 'scale(1.1) translateY(-1px)',
                     boxShadow: '0 6px 16px rgba(139, 92, 246, 0.2)'
                   },
@@ -161,7 +164,7 @@ export default function RawItem({ raw, isAdmin, onDelete, onEdit, onPin }: RawIt
                     color: '#a78bfa',
                     borderColor: 'rgba(51, 65, 85, 0.5)',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                    '&:hover': { 
+                    '&:hover': {
                       bgcolor: 'rgba(30, 41, 59, 1)',
                       boxShadow: '0 6px 16px rgba(167, 139, 250, 0.2)'
                     }
